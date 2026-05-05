@@ -68,15 +68,15 @@ Add your form or content for adding a property here
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Resort (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Attic m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Schools (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Roof Garden m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Resort (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Covered Veranda m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                     </div>
@@ -84,23 +84,23 @@ Add your form or content for adding a property here
 
                     <div class="grid grid-cols-5 md:grid-cols-5 gap-5 mb-4">
                          <div>
-                            <label for="bedrooms" class="block text-black text-sm mb-1">{{ __('Covered m²') }}</label>
+                            <label for="bedrooms" class="block text-black text-sm mb-1">{{ __(' Uncovered Veranda m²') }}</label>
                             <input type="number" name="bedrooms" id="bedrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Schools (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Covered Parking m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Resort (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Basement m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Schools (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __(' Courtyard m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Resort (km)') }}</label>
+                            <label for="bathrooms" class="block text-black text-sm mb-1">{{ __('Garden m²') }}</label>
                             <input type="number" name="bathrooms" id="bathrooms" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                     </div>

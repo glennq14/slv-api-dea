@@ -18,14 +18,12 @@ return new class extends Migration
                 ->references('id')
                 ->on('properties')
                 ->onDelete('cascade');
-            $table->enum('network', [
-                    'slv',
-                    'rightmove',
-                    'zoopla',
-                    'bazaraki',
-                    'apits'
-                ])
-                ->comment('Network for third party');
+            $table->json('external_feed')
+                ->nullable()
+                ->comment('Network for third party e.g. slv, zoopla, barzaki, apits');
+            $table->json('website_banner')
+                ->nullable()
+                ->comment('Website banner e.g. reduced, sold, reseved, exclusive and new listing');
             $table->boolean('published')
                 ->default(0)
                 ->comment('published status of the property on the third party network');
