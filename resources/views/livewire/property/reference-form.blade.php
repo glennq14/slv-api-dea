@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Models\PropertyType;
@@ -327,11 +326,6 @@ Add your form or content for adding a property here
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="py-3">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 flex">
-            <button type="submit" class="ml-auto px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500 px-7">{{ __('Save and Next &#x2192;') }}</button>
         </div>
     </div>
 </form>
