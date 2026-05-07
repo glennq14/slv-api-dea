@@ -16,7 +16,7 @@ class DottedSteps extends Component
         'Amenities',
         'Options',
         'Vendor',
-        'Custom Fields',
+        'Key Features',
         'V-tour Video',
         'Title & Description'
     ];

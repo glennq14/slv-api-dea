@@ -1,11 +1,10 @@
 <?php
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\PropertiesController as V1PropertiesController;
 use App\Http\Controllers\Api\v1\UsersController as V1UsersController;
 use App\Http\Controllers\Api\v1\PropertyTypesController as V1PropertyTypesController;
-
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('v1')->group( function () {
@@ -15,8 +14,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 });
 
+// Route::middleware('api')->group(function () {
+    Route::post('/login', [LoginController::class, 'store']);
+    Route::post('/logout', [LoginController::class, 'destroy']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+// });
+
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';

@@ -1,5 +1,9 @@
-<form method="POST" action="{{ route('properties.store') }}">
-@csrf
+
+<!-----------------------------------------------------
+Add your form or content for adding a property here
+------------------------------------------------------->
+<!-- <form method="POST" action="{{ route('properties.store') }}">
+@csrf -->
 
     <!-----------------------------------------
     Basic location info
@@ -9,12 +13,11 @@
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Floor Plans')  }}
+                        {{ __('Custom Fields')  }}
                     </h3>
-                    <div class="border rounded h-96">
-                    </div>
+                     <livewire:accordion />
                 </div>  
             </div>
         </div>
     </div>
-</form>
+<!-- </form> -->

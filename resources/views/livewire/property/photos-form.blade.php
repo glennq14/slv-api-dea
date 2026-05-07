@@ -11,8 +11,7 @@
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Photos')  }}
                     </h3>
-                    <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
-                        
+                    <div class="border rounded h-96">
                     </div>
                 </div>  
             </div>

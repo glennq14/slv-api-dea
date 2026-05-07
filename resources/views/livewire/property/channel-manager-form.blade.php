@@ -25,13 +25,13 @@ Add your form or content for adding a property here
                                 <input type="checkbox" name="external_feed[]" value="zoopla" class="border rounded text-blue-800 h-5 w-5 mr-2" /> Zoopla
                             </label>
                             <label class="border-2 border-gray-300 text-slate-600 px-3 py-2 rounded text-sm tracking-wider has-[:checked]:border-blue-800 mr-3">
-                                <input type="checkbox" name="external_feed[]" value="baziraki" class="border rounded text-blue-800 h-5 w-5 mr-2" /> Baziraki
+                                <input type="checkbox" name="external_feed[]" value="barazaki" class="border rounded text-blue-800 h-5 w-5 mr-2" /> Barazaki
                             </label>
                             <label class="border-2 border-gray-300 text-slate-600 px-3 py-2 rounded text-sm tracking-wider has-[:checked]:border-blue-800 mr-3">
                                 <input type="checkbox" name="external_feed[]" value="apits" class="border rounded text-blue-800 h-5 w-5 mr-2" /> APITS
                             </label>
                             <label class="border-2 border-gray-300 text-slate-600 px-3 py-2 rounded text-sm tracking-wider has-[:checked]:border-blue-800 mr-3">
-                                <input type="checkbox" name="external_feed[]" value="zoopla" class="border rounded text-blue-800 h-5 w-5 mr-2" /> APITS
+                                <input type="checkbox" name="external_feed[]" value="zoopla" class="border rounded text-blue-800 h-5 w-5 mr-2" /> Zoopla
                             </label>
                             <label class="border-2 border-gray-300 text-slate-600 px-3 py-2 rounded text-sm tracking-wider has-[:checked]:border-blue-800 mr-3">
                                 <input type="checkbox" name="external_feed[]" value="slv" class="border rounded text-blue-800 h-5 w-5 mr-2" /> SLV (Searchable on website)
