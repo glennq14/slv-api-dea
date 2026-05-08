@@ -8,8 +8,14 @@ use Illuminate\Support\Facades\DB;
 class MultiStepForm extends Component
 {
     public $currentStep = 8;
-  
     public $totalSteps = 10;
+
+    public $testVarable = 3;
+
+
+
+
+
 
     public function nextStep()
     {

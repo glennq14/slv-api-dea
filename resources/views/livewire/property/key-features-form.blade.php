@@ -1,4 +1,21 @@
+<?php
+use Livewire\Volt\Component;
 
+new class extends Component
+{
+
+    public string $testVariable;
+
+    /**
+     * Mount the component.
+     */
+    public function mount(): void
+    {
+        $this->testVariable = 
+    }
+}
+
+?>
 <!-----------------------------------------------------
 Add your form or content for adding a property here
 ------------------------------------------------------->
@@ -13,9 +30,10 @@ Add your form or content for adding a property here
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Custom Fields')  }}
+                        {{ __('Key Features')  }}
+                        {{ $testVariable }}
                     </h3>
-                     <livewire:accordion />
+                     <livewire:accordion-key-features :testVariable="$testVariable"/>
                 </div>  
             </div>
         </div>

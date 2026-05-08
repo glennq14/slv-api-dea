@@ -36,6 +36,7 @@
     @endif 
 
      <!-- Step 7 -->
+    
     @if ( $currentStep == 7 )
         <livewire:dotted-steps :step="$currentStep" />
         <livewire:property.contact-details-form />
@@ -44,7 +45,7 @@
      <!-- Step 8 -->
     @if ( $currentStep == 8 )
         <livewire:dotted-steps :step="$currentStep" />
-        <livewire:property.key-features-form />
+        <livewire:property.key-features-form :testVariable="$testVarable" />
     @endif
 
      <!-- Step 9 -->

@@ -34,7 +34,7 @@ return new class extends Migration
                 ->default('available')
                 ->comment('Whether the title deeds for the property are available');
             $table->enum('leasehold_property', ['yes','no'])
-                ->default('yes')
+                ->default('no')
                 ->comment('Leasehold Property');
             $table->integer('bedrooms')
                 ->default(0)
@@ -63,7 +63,7 @@ return new class extends Migration
                 ->comment('Year of construction')
                 ->nullable();
             $table->enum('pool', ['yes', 'no'])
-                ->default('yes')
+                ->default('no')
                 ->comment('Whether the property has a pool');
             $table->string('pool_description', 255)
                 ->comment('Description of the pool')
@@ -75,10 +75,10 @@ return new class extends Migration
                 ->default('A')
                 ->comment('Plan zone for the property');
             $table->enum('sea_view', ['yes','no'])
-                ->default('yes')
+                ->default('no')
                 ->comment('Whether the property has a sea view');
             $table->enum('for_sale_board', ['yes','no'])
-                ->default('yes')
+                ->default('no')
                 ->comment('Whether the property is on the for sale board');
 
             $table->timestamps();

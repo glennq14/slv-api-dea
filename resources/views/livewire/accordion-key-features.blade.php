@@ -1,6 +1,7 @@
 <div class="space-y-2">
+    {{ $testVarable }}
     @foreach($items as $item)
-        <div class="border rounded">
+        <div wire:ignore.self class="border rounded">
 
             <button
                 wire:click="toggle({{ $item['id'] }})"
@@ -26,14 +27,18 @@
             </button>
 
             @if($openItem === $item['id'])
-                <div class="p-4 bg-white border-t">
+                <div wire:ignore class="p-4 bg-white border-t">
                     <div class="grid grid-cols-3 gap-4">
-                        <div class="">
-                            <div class="border border-gray-300 flex items-center rounded p-2">
-                                <span>{{ $item['fields']['label'] }}</span>
-                                <input type="checkbox" name="{{ $item['fields']['name'] }}" class="ml-auto" />
+                        <!-- <div class=""> -->
+                            @if (isset($item['fields']) && count($item['fields']) > 0)
+                            @foreach ($item['fields'] as $field)
+                            <div wire:ignore.self class="border border-gray-300 flex items-center rounded p-2">
+                                <span>{{ $field['label'] }}</span>
+                                <input type="checkbox" class="ml-auto rounded border-gray-400" />
                             </div>
-                        </div>
+                            @endforeach
+                            @endif
+                        <!-- </div> -->
                     </div>
                     
                 </div>
