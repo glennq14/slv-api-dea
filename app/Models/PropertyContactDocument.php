@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyPrice extends Model
+class PropertyContactDocument extends Model
 {
     public function properties(): BelongsTo
     {
-        return $this->belongsTo(Property::class, "property_id");
+        return $this->belongsTo(PropertyContactDetail::class, "property_contact_detail_id");
     }
 }

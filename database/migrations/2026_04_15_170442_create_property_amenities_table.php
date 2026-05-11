@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_detail_sizings', function (Blueprint $table) {
+        Schema::create('property_amenities', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')

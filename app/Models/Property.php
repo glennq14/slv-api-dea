@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Models\User     ;
+use App\Models\User;
 use App\Models\PropertyType;
 use App\Models\PropertyAddress;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,26 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Property extends Model
 {
     protected $fillable = [
-        'author_id',
-        'property_type_id',
-        'title',
-        'description',
-        'title_deeds',
-        'leasehold_property',
-        'bedrooms',
-        'bathrooms',
-        'build',
-        'plot',
-        'plot_description',
-        'agent_id',
-        'year_of_construction',
-        'pool',
-        'pool_description',
-        'listing_type',
-        'plan_zone',
-        'sea_view',
-        'for_sale_board',
-        'date_available'
+        
     ];
 
     public function author(): BelongsTo
@@ -50,24 +31,39 @@ class Property extends Model
         return $this->hasOne(PropertyAddress::class);
     }
 
-    // public function details(): HasOne
-    // {
-    //     return $this->hasOne(PropertyDetail::class);
-    // }
-
     public function price(): HasOne
     {
         return $this->hasOne(PropertyPrice::class, 'property_id');
+    }
+    
+    public function amenities(): HasOne
+    {
+        return $this->hasOne(PropertyAddress::class);
+    }
+
+    public function constact(): HasOne
+    {
+        return $this->hasOne(PropertyAddress::class);
     }
 
     public function media(): HasMany
     {
         return $this->hasMany(PropertyMedia::class);
     }
-    
-    public function rooms(): HasOne
+
+    public function floorPlan(): HasMany
     {
-        return $this->hasOne(PropertyDetailRoom::class);
+        return $this->HasMany(PropertyFloorPlan::class);
+    }
+    
+    public function keyFeature(): HasMany
+    {
+        return $this->HasMany(PropertyKeyFeature::class);
+    }
+
+    public function video(): HasMany
+    {
+        return $this->hasMany(PropertyVideo::class);
     }
 
     public function networks(): HasMany

@@ -45,7 +45,7 @@
      <!-- Step 8 -->
     @if ( $currentStep == 8 )
         <livewire:dotted-steps :step="$currentStep" />
-        <livewire:property.key-features-form :testVariable="$testVarable" />
+        <livewire:property.key-features-form />
     @endif
 
      <!-- Step 9 -->
@@ -69,7 +69,7 @@
                 @endif
 
                 @if ( $currentStep != 10 )
-                    <button wire:click="uploadPhotos" wire:loading.class="opacity-50" class="px-7 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500">
+                    <button wire:click="nextStep" wire:loading.class="opacity-50" class="px-7 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500">
                         <span wire:loading.remove>{{ __('Save and Next') }} &rarr;</span>
                         <span wire:loading>
                             Loading..

@@ -86,8 +86,9 @@ Add your form or content for adding a property here
 </form>
 @push('scripts')
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDA2bC2oWiv5g9sPg799qjYor6xbcHXrSk&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjtQlPL0rirZ70g8Xew5Ol3mqhqmAju08&callback=initMap"
     defer
   ></script>
 <script src="{{ url('/js/google.map.js') }}"></script>
+<script>alert('test')</script>
 @endpush

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyPrice extends Model
+class PropertyAmenities extends Model
 {
     public function properties(): BelongsTo
     {
