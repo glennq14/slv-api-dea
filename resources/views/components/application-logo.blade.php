@@ -1,0 +1,1 @@
+<img src="{{ asset('img/slv-logo_250x137.png') }}" class="w-28"/>

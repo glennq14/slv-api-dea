@@ -1,0 +1,55 @@
+#Database Migration
+php artisan migrate
+
+# Run the seeder for the Property Type
+php artisan db:seed --class=PropertyTypesSeeder
+
+# Generate App key
+php artisan key:generate --show
+
+# To update tailwind css minify
+npx tailwindcss -i ./resources/css/app.css -o ./public/css/app.css --minify
+
+#Performance Optimization
+#Single Command:
+php artisan optimize
+
+#Granular Commands:
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+#Composer Optimization:
+composer install --optimize-autoloader --no-dev
+
+--------------------------------
+Server & Security Requirements
+---------------------------------
+- Web Server Root: Point your web server (Nginx/Apache) strictly to the /public directory. 
+  Serving from the project root exposes sensitive system files.
+
+- Directory Permissions: Ensure the storage and bootstrap/cache directories are writable 
+  by the web server user (e.g., www-data).
+
+- PHP Extensions: 
+  Verify your production server meets Laravel's System Requirements (https://laravel.com/docs/13.x/deployment), 
+  typically requiring extensions like BCMath, Ctype, OpenSSL, and PDO.
+
+---------------------------
+Deployment Workflow
+---------------------------
+1. Maintenance Mode: to prevent user errors during updates.
+    php artisan down
+2. Code Update: Pull latest changes via Git.
+3. Dependencies: 
+    composer install --optimize-autoloader --no-dev
+4. Database: to run migrations without a prompt.
+    php artisan migrate --force 
+5. Caching: 
+    php artisan optimize
+6. Frontend: (if using Vite/Mix).
+    npm install && npm run build 
+7. Restart Services: to ensure workers use new code.
+    php artisan queue:restart 
+8. Go Live: 
+    php artisan up
