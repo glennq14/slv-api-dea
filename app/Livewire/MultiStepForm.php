@@ -7,12 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class MultiStepForm extends Component
 {
-<<<<<<< Updated upstream
-    // public $photo;
-    public $currentStep = 1;
-=======
     public $currentStep = 2;
->>>>>>> Stashed changes
     public $totalSteps = 10;
 
     public $testVarable = 3;
