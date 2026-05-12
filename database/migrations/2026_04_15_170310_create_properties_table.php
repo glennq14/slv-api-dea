@@ -24,17 +24,17 @@ return new class extends Migration
             $table->foreign('property_type_id')
                 ->references('id')
                 ->on('property_types');
-            $table->string('reference', 15)
+            $table->string('reference', 45)
                 ->comment('Unique reference for this price entry');
             $table->string('title')
-                ->unique()
                 ->comment('Property title');
             $table->text('description')
-                ->comment('The full description of the property');
+                ->comment('The full description of the property')
+                ->nullable();
             $table->enum('title_deeds', ['available','not-available'])
-                ->default('available')
+                ->nullable()
                 ->comment('Whether the title deeds for the property are available');
-            $table->enum('leasehold_property', ['yes','no'])
+            $table->enum('leasehold', ['yes','no'])
                 ->default('no')
                 ->comment('Leasehold Property');
             $table->integer('bedrooms')
@@ -43,15 +43,15 @@ return new class extends Migration
             $table->integer('bathrooms')
                 ->default(0)
                 ->comment('Number of bathrooms');
-            $table->decimal('build', 8, 2)
+            $table->decimal('build', 10, 2)
                 ->default(0)
                 ->comment('Build area in square meters');
-            $table->decimal('terrace', 8, 2)
+            $table->decimal('terrace', 10, 2)
                 ->default(0)
                 ->comment('Terrace area in square meters');
-            $table->decimal('plot', 8,2)
-                ->comment('Plot area in square meters')
-                ->nullable();
+            $table->decimal('plot', 10,2)
+                ->default(0)
+                ->comment('Plot area in square meters');
             $table->string('plot_description', 255)
                 ->comment('Description of the plot area')
                 ->nullable();
@@ -63,26 +63,28 @@ return new class extends Migration
             $table->string('year_of_construction', 5)
                 ->comment('Year of construction')
                 ->nullable();
-            $table->enum('pool', ['yes', 'no'])
-                ->default('no')
+            $table->decimal('pool', 10,2)
+                ->default(0)
                 ->comment('Whether the property has a pool');
             $table->string('pool_description', 255)
                 ->comment('Description of the pool')
                 ->nullable();
             $table->enum('listing_type', ['resale', 'new'])
-                ->default('Resale')
+                ->nullable()
                 ->comment('Property listing type: "Resale" for sale, "New" for new');
             $table->enum('plan_zone',['A','B','C'])
-                ->default('A')
+                ->nullable()
                 ->comment('Plan zone for the property');
             $table->enum('sea_view', ['yes','no'])
-                ->default('no')
+                ->nullable()
                 ->comment('Whether the property has a sea view');
             $table->enum('for_sale_board', ['yes','no'])
-                ->default('no')
+                ->nullable()
                 ->comment('Whether the property is on the for sale board');
             $table->enum('save_type', ['draft','finished'])
-                ->default('draft');
+                ->nullable();
+            $table->enum('status', ['published', 'active', 'inactive'])
+                ->nullable();
             $table->timestamps();
         });
 

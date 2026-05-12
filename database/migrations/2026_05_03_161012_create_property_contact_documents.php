@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('filename')->nullable();
             $table->string('file_path')->nullable();
-            $table->string('file_type')
+            $table->string('file_type', 45)
                 ->nullable();
             $table->timestamp('created_at')->useCurrent();
         });

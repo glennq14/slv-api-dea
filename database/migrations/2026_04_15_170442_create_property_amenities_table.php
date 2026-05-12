@@ -18,10 +18,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('properties')
                 ->onDelete('cascade');
-            $table->decimal('ammenities',8,2)->default(0);
-            $table->decimal('air_port',8,2)->default(0);
+            $table->decimal('amenities',8,2)->default(0);
+            $table->decimal('airport',8,2)->default(0);
             $table->decimal('sea',8,2)->default(0);
-            $table->decimal('public_transaport',8,2)->default(0);
+            $table->decimal('public_transport',8,2)->default(0);
             $table->decimal('schools',8,2)->default(0);
             $table->decimal('resorts',8,2)->default(0);
             $table->decimal('covered',8,2)->default(0);
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->decimal('basement',8,2)->default(0);
             $table->decimal('countyard',8,2)->default(0);
             $table->decimal('garden',8,2)->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

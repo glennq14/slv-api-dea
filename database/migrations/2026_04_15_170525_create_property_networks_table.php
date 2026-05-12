@@ -19,7 +19,7 @@ return new class extends Migration
                 ->on('properties')
                 ->onDelete('cascade');
             $table->enum('external_feeds', ['right_move', 'zoopla', 'barazaki', 'apits', 'slv', 'slv_website', 'directs'])
-                ->default('slv')
+                ->nullable()
                 ->comment('Network for third party e.g. slv, zoopla, barzaki, apits');
             $table->enum('website_banner', ['reduced', 'reserved', 'sold', 'exclusive', 'new_listing', null])
                 ->nullable()

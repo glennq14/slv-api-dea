@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_media', function (Blueprint $table) {
+        Schema::create('property_photos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')
@@ -20,9 +20,10 @@ return new class extends Migration
                 ->on('properties')
                 ->onDelete('cascade');
             $table->enum('type', [
-                    'GalleryImage', 
-                    'Floorplan'
+                    'gallery', 
+                    'floorplan'
                 ])
+                ->nullable()
                 ->comment('The type of media which is being sent');
             $table->string('url')
                 ->comment('The URL to retrieve this piece of media from');
@@ -31,7 +32,7 @@ return new class extends Migration
                 ->nullable();
             $table->integer('sort_order')
                 ->comment('The display order for this piece of media');
-            $table->dateTime('media_update_date')
+            $table->dateTime('photo_update_date')
                 ->comment('The date the media at this URL was last updated in the format: dd-MM-yyyy HH:mm:ss')
                 ->nullable();
             $table->timestamp('created_at')->useCurrent(); 
