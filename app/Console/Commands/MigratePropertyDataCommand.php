@@ -124,7 +124,7 @@ class MigratePropertyDataCommand extends Command
                     $photosData[] = [
                         'property_id' => $property->id,
                         'url' => $photo,
-                        'type' => null,
+                        'type' => 'gallery',
                         'caption' => null,
                         'sort_order' => $key + 1
                     ];
