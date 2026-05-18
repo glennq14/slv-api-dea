@@ -13,7 +13,7 @@ use App\Models\PropertyAddress;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
-    'author_id', 'property_type_id', 'reference', 'title', 'description', 'title_deeds',
+    'author_id', 'property_type_id', 'reference', 'description', 'title_deeds',
     'leasehold', 'bedrooms','bathrooms', 'build',
     'terrace', 'plot', 'plot_description', 'agent_id',
     'year_of_construction', 'pool', 'pool_description',

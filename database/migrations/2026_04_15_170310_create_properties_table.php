@@ -26,8 +26,6 @@ return new class extends Migration
                 ->on('property_types');
             $table->string('reference', 45)
                 ->comment('Unique reference for this price entry');
-            $table->string('title')
-                ->comment('Property title');
             $table->text('description')
                 ->comment('The full description of the property')
                 ->nullable();
