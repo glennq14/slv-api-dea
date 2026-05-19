@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('total_reduction_price', 10,2)->default(0);
             $table->decimal('commission', 10,2)->default(0);
             $table->decimal('communal_charges',10,2)->default(0);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

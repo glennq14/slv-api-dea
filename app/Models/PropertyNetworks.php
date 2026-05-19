@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PropertyNetworks extends Model
 {
      const UPDATED_AT = null;
-    public function properties(): BelongsTo
+     
+    public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class, "property_id");
     }

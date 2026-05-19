@@ -36,7 +36,7 @@ class Property extends Model
 
     public function address(): HasOne
     {
-        return $this->hasOne(PropertyAddress::class);
+        return $this->hasOne(PropertyAddress::class, 'property_id');
     }
 
     public function price(): HasOne
@@ -79,6 +79,11 @@ class Property extends Model
         return $this->hasMany(PropertyNetworks::class);
     }
 
+    public function externalFeeds(): HasOne
+    {
+        return $this->hasOne(PropertyExternalFeed::class);
+    }
+
     public function getPropertyTypeAttribute(): string
     {
         return $this->attribute($this->property_type);
@@ -87,5 +92,7 @@ class Property extends Model
     public function getBasicPriceAttribute(): ?float
     {
         return $this->price ? $this->price->basic_price : null;
-    }
+
+        }
+
 }

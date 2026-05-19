@@ -55,7 +55,7 @@ return new class extends Migration
             $table->text('lawyer_address')
                 ->comment('The address of the contact\'s lawyer')
                 ->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

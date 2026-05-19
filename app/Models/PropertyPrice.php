@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 #[Hidden(['property_id', 'created_at'])]
 class PropertyPrice extends Model
 {
-    public function properties(): BelongsTo
+    public function propertity(): BelongsTo
     {
         return $this->belongsTo(Property::class, "property_id");
     }

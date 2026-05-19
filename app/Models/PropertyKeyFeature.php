@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class PropertyKeyFeature extends Model
 {
-    public function properties(): BelongsTo
+    public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class, "property_id");
     }

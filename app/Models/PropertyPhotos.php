@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 ])]
 #[Hidden(['property_id', 'created_at'])]class PropertyPhotos extends Model
 {
-    public function properties(): BelongsTo
+     const UPDATED_AT = null;
+
+    public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class, "property_id");
     }

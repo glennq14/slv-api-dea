@@ -26,7 +26,7 @@ return new class extends Migration
                 ->on('property_types');
             $table->string('reference', 45)->index()
                 ->comment('Unique reference for this price entry');
-            $table->text('description')
+            $table->longText('description')
                 ->comment('The full description of the property')
                 ->nullable();
             $table->enum('title_deeds', ['available','not-available'])
@@ -79,7 +79,7 @@ return new class extends Migration
             $table->enum('for_sale_board', ['yes','no'])
                 ->nullable()
                 ->comment('Whether the property is on the for sale board');
-            $table->enum('save_type', ['draft','finished'])
+            $table->enum('save_type', ['draft','finished','feed'])->index()
                 ->nullable();
             $table->enum('status', ['published', 'active', 'inactive'])->index()
                 ->nullable();
