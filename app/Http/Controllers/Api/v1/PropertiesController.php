@@ -25,7 +25,7 @@ class PropertiesController extends Controller
         if ($request->filled('include')) {
             $query->with($this->parseIncludes($request->input('include')));
         }
-
+        
         if ($request->filled('reference')) {
             $query->where('properties.reference', trim($request->input('reference')));
         } else {
@@ -34,45 +34,62 @@ class PropertiesController extends Controller
                 $this->applyOrderBy($query, $request->input('order_by'));
             }
 
-            if ($request->filled('region')) {
+            if ($request->filled('region')
+                && $request->input('region') != 'all'
+            ) {
                 $query->whereHas('address', fn ($query) => $query->where('region', trim($request->input('region'))));
             }
 
-            if ($request->filled('town')) {
+            if ($request->filled('town')
+                && $request->input('town') != 'all'
+            ) {
                 $towns = array_map('trim', explode(',', $request->input('town')));
                 $query->whereHas('address', fn ($query) => $query->whereIn('town_city', $towns));
             }
 
-            if ($request->filled('property_types')) {
+            if ($request->filled('property_types') 
+                && $request->input('property_types') != 'all'
+            ) {
                 $types = array_map('trim', explode(',', $request->input('property_types')));
                 $query->whereHas('property_type', fn ($query) => $query->whereIn('name', $types));
             }
 
-            if ($request->filled('bedrooms')) {
+            if ($request->filled('bedrooms') 
+                && $request->input('bedrooms') != 'any'
+            ) {
                 $query->where('properties.bedrooms', $request->input('bedrooms'));
             }
 
-            if ($request->filled('bathrooms')) {
+            if ($request->filled('bathrooms') 
+                && $request->input('bathrooms') != 'any'
+            ) {
                 $query->where('properties.bathrooms', $request->input('bathrooms'));
             }
-            
 
             if ($request->filled('min_price') || $request->filled('max_price')) {
                 $query->whereHas('price', function ($query) use ($request) {
-                    if ($request->filled('min_price')) {
+                    if ($request->filled('min_price')
+                        && $request->input('min_price') != 'any'
+                    ) {
                         $query->where('basic_price', '>=', $request->input('min_price'));
                     }
-                    if ($request->filled('max_price')) {
+                    if ($request->filled('max_price')
+                        && $request->input('max_price') != 'any'
+                    ) {
                         $query->where('basic_price', '<=', $request->input('max_price'));
                     }
                 });
             }
 
-            if ($request->filled('plot')) {
+            if ($request->filled('plot_size') 
+                && $request->input('plot_size') != 'any'
+            ) {
                 $query->where('properties.plot', '>=', $request->input('plot'));
             }
 
-            if ($request->filled('covered')) {
+            if ($request->filled('area_size')
+                && $request->input('area_size') != 'any'
+            ) {
                 $query->whereHas('amenities', fn ($query) => $query->where('covered', '=', $request->input('covered')));
             }
         }
