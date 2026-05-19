@@ -17,7 +17,10 @@ class PropertiesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Property::query()->where('status', 'published');
+        $query = Property::query()
+                    ->with(['networks'])
+                    ->where('status', 'published')
+                    ->whereHas('networks', fn ($query) => $query->where('external_feeds', 'slv'));
 
         if ($request->filled('include')) {
             $query->with($this->parseIncludes($request->input('include')));
