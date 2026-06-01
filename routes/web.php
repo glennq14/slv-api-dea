@@ -11,6 +11,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware(['verified'])
         ->name('dashboard');
 
+    Route::view('diaries', 'diaries')
+        ->middleware(['verified'])
+        ->name('diaries');
+
     Route::view('profile', 'profile')
         ->name('profile');
     
