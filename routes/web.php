@@ -11,11 +11,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware(['verified'])
         ->name('dashboard');
 
+    Route::view('diaries', 'diaries')
+        ->middleware(['verified'])
+        ->name('diaries');
+
     Route::view('profile', 'profile')
         ->name('profile');
     
     Route::resource('properties', PropertiesController::class)->names([
-        'index' => 'web_index',
+        'index' => 'properties',
         'create' => 'web_create',
         'store' => 'web_store',
         'show' => 'web_show',
