@@ -15,6 +15,7 @@ Add your form or content for adding a property here
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Distance')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Add distances to nearby amenities, airport, sea, public transport, schools and resorts. This will help your property show up in more search results and attract more potential buyers.') }}</p>
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                          <div>
                             <label for="amenities" class="block text-black text-sm mb-1">{{ __('Amenities (km)') }}</label>
@@ -58,6 +59,7 @@ Add your form or content for adding a property here
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Additional Areas')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Add information about additional areas of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
                     <div class="grid grid-cols-4 md:grid-cols-4 gap-5 mb-4">
                          <div>
                             <label for="covered" class="block text-black text-sm mb-1">{{ __('Reference m²') }}</label>

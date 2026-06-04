@@ -2,11 +2,11 @@
 
 use App\Models\PropertyType;
 use Livewire\Volt\Component;
-use Livewire\Attributes\Validate;
 
 new class extends Component
 {
- 
+    public string $reference;
+
     public $propertyTypes = [];
 
     public function mount(PropertyType $propertyTypes)
@@ -31,16 +31,16 @@ new class extends Component
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Basic')  }}
                     </h3>
-                    
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Add the basic details about the property. You can always edit these details later.') }}</p>
                     <!-- Form fields for property details -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
                         <div>
                             <label for="reference" class="required-field block text-black text-sm mb-1 uppercase">{{ __('Reference') }}</label>
                             <input type="text" 
-                                name="reference" 
                                 id="reference" 
                                 class="uppercase placeholder:normal-case w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
                                 placeholder="SLV-1234"
+                                wire:model="reference"
                                 required
                                 />
                         </div>
@@ -50,9 +50,14 @@ new class extends Component
                                 <div class="absolute ml-0 text-gray-500 pr-3 h-full left-3 flex items-center">
                                     &euro;
                                 </div>
-                                <input type="number" name="basic_price" id="basicPrice" 
+                                <input type="number" 
+                                    name="basic_price" 
+                                    id="basicPrice" 
                                     placeholder="e.g. 250000"
-                                    class="w-full pl-7 text-sm  border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 [&::-webkit-inner-spin-button]:mr-8" required>
+                                    class="w-full pl-7 text-sm  border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 [&::-webkit-inner-spin-button]:mr-8" 
+                                    wire:model="basic_price"
+                                    required
+                                />
                                 <div class="absolute ml-0 text-gray-500 pr-3 border-r-1 border-gray-300 rounded-r-md h-full right-0 flex items-center">
                                     {{ __('GBP') }}
                                 </div>
@@ -81,6 +86,9 @@ new class extends Component
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Property Details')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">
+                        {{ __('Add more details about the property. This will help your property show up in more search results and attract more potential buyers.') }}
+                    </p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
                         <div>
                             <label for="reference" class="required-field block text-black text-sm mb-1">{{ __('Property Type') }}</label>
@@ -273,6 +281,10 @@ new class extends Component
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Specific')  }}
                     </h3>
+
+                    <p class="mb-5 text-sm text-gray-600">
+                        {{ __('Select specific details about the property. This will help your property show up in more search results and attract more potential buyers.') }}
+                    </p>
                     <!-- Add your form or content for adding a property here -->
                     <!-- Form fields for property details -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-4">

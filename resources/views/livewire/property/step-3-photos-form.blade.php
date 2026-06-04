@@ -27,6 +27,7 @@ new class extends Component
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Photos')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Upload photos of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
                     <div class="border rounded">
                         <div class="flex items-center justify-center w-full">
                             <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 bg-neutral-secondary-medium border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium">

@@ -98,6 +98,7 @@ Property Location input form
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Location')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Select the location of the property. This will help your property show up in the correct location on the map and improve search results for location-based searches.') }}</p>
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                         <div>
                             <label for="region" class="required-field font-md block text-black text-sm mb-1">{{ __('Region') }}</label>
@@ -142,6 +143,10 @@ Property Location input form
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Map')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Select the property location on the map. You can adjust the accuracy of the location by selecting a radius in metres.') }}
+                        <br />
+                        {{ __('This will help your property show up in the correct location on the map and improve search results for location-based searches.') }} 
+                    </p>
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                         <div>
                             <label for="latitude" class="required-field font-md block text-black text-sm mb-1">{{ __('Latitude') }}</label>
@@ -152,7 +157,7 @@ Property Location input form
                             <input type="number" name="longtitude" id="longtitude" class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
                         </div>
                         <div>
-                            <label for="locality" class="required-field font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
+                            <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
                             <select name="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="1000" default>1000</option>
                                 <option value="5000" >5000</option>

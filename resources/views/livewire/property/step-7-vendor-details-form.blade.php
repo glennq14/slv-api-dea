@@ -1,22 +1,23 @@
 
-<!-----------------------------------------------------
-Add your form or content for adding a property here
-------------------------------------------------------->
-<form method="POST" action="{{ route('properties.store') }}">
-@csrf
-
-    <!-----------------------------------------
-    Basic location info
-    ----------------------------------------->
-    <div class="py-3">
+<!-----------------------------------------
+Basic location info
+----------------------------------------->
+<div>
+    <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+    </div>
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Contact Details')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">
+                        {{ __('Add contact details for the property vendor. This will help potential buyers get in touch with you.') }}
+                    </p>
                     <div class="">
-                        <h4>{{ __('Contact Category')  }}</h4>
+                        <h4>{{ __('Category')  }}</h4>
                         <div class="pt-3 pb-5 text-sm">
                             <label class="mr-2"><input type="radio" name="category" value="vendor" checked/>&nbsp;&nbsp;{{ __('Vendor') }}</label>
                             <label class="mr-2"></label><input type="radio" name="category" value="agent" />&nbsp;&nbsp;{{ __('Agent') }}</label>
@@ -25,11 +26,11 @@ Add your form or content for adding a property here
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-2 gap-5 mb-4 mt-3">
                        <div>
-                            <label for="firstName" class="block text-black text-sm mb-1">{{ __('First Name') }}</label>
+                            <label for="firstName" class="required-field block text-black text-sm mb-1">{{ __('First Name') }}</label>
                             <input type="text" name="contact_details_first_name" id="firstName" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="lastName" class="block text-black text-sm mb-1">{{ __('Last Name') }}</label>
+                            <label for="lastName" class="required-field block text-black text-sm mb-1">{{ __('Last Name') }}</label>
                             <input type="text" name="contact_details_last_name" id="lastName" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                     </div>
@@ -39,11 +40,11 @@ Add your form or content for adding a property here
                             <input type="text" name="contact_details_telephone" id="telephone" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="lastName" class="block text-black text-sm mb-1">{{ __('Mobile') }}</label>
+                            <label for="lastName" class="required-field block text-black text-sm mb-1">{{ __('Mobile') }}</label>
                             <input type="text" name="contact_details_mobile" id="mobile" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="email" class="block text-black text-sm mb-1">{{ __('Email') }}</label>
+                            <label for="email" class="required-field block text-black text-sm mb-1">{{ __('Email') }}</label>
                             <input type="email" name="contact_details_email" id="email" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                     </div>
@@ -87,33 +88,35 @@ Add your form or content for adding a property here
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Layer Details')  }}
+                        {{ __('Lawyer Details')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">
+                        {{ __('Add contact details for the property lawyer. This will help potential buyers get in touch with you.') }}
+                    </p>
                     <div class="grid grid-cols-4 md:grid-cols-4 gap-5 mb-4">
                         <div>
-                            <label for="layerFirstName" class="block text-black text-sm mb-1">{{ __('First Name') }}</label>
+                            <label for="layerFirstName" class="required-field block text-black text-sm mb-1">{{ __('First Name') }}</label>
                             <input type="text" name="layer_first_name" id="layerFirstName" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="layerLastNamew" class="block text-black text-sm mb-1">{{ __('Last Name') }}</label>
+                            <label for="layerLastNamew" class="required-field block text-black text-sm mb-1">{{ __('Last Name') }}</label>
                             <input type="text" name="layer_last_name" id="layerLastNamew" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="layerTelephoneDay" class="block text-black text-sm mb-1">{{ __('Telephone Day') }}</label>
+                            <label for="layerTelephoneDay" class="required-field block text-black text-sm mb-1">{{ __('Telephone / Mobile') }}</label>
                             <input type="text" name="layer_telephone_day" id="layerTelephoneDay" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div>
-                            <label for="layerEmail" class="block text-black text-sm mb-1">{{ __('Email') }}</label>
+                            <label for="layerEmail" class="required-field block text-black text-sm mb-1">{{ __('Email') }}</label>
                             <input type="email" name="layer_email" id="layerEmail" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                     </div>
                     <div class="">
-                        <label class="text-sm">{{ __('Address') }}</label>
+                        <label class="required-field block text-black text-sm mb-1">{{ __('Address') }}</label>
                         <textarea name="contact_details_notes" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-32"></textarea>
                     </div>
                 </div>  
             </div>
         </div>
     </div>
-
-</form>
+</div>

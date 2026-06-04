@@ -15,8 +15,11 @@ Add your form or content for adding a property here
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Channel Manager')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">
+                        {{ __('Manage your property across multiple channel managers. This will help your property show up in more search results and attract more potential buyers.') }}
+                    </p>
                     <div class="mb-4">
-                        <h4 class="text-lg">External Feeds</h4>
+                        <h4 class="text-lg">{{ __('External Feeds') }}</h4>
                         <div class="flex py-2">
                             <label class="border-2 border-gray-300 text-slate-600 px-3 py-2 rounded text-sm tracking-wider has-[:checked]:border-blue-800 mr-3">
                                 <input type="checkbox" name="external_feed[]" value="right_move" class="border rounded text-blue-800 h-5 w-5 mr-2" /> Right Move 

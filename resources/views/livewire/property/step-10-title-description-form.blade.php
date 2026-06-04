@@ -1,13 +1,10 @@
-
-<!-----------------------------------------------------
-Add your form or content for adding a property here
-------------------------------------------------------->
-<form method="POST" action="{{ route('properties.store') }}">
-@csrf
-
-    <!-----------------------------------------
-    Basic location info
-    ----------------------------------------->
+<!-----------------------------------------
+Basic location info
+----------------------------------------->
+<div>
+    <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+    </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
@@ -16,9 +13,15 @@ Add your form or content for adding a property here
                         {{ __('Title and Description')  }}
                     </h3>
                     <div class="w-full">
-                        <label for="title">{{ __('Property Title')  }} <span class="text-gray-500">{{ __('e.g. "3 Bedroom Villa in Paphos, Cyprus"') }}</span></label>
+                        <label for="title" class="required-field">{{ __('Property Title')  }} </label>
                         <div class="flex gap-5">
-                            <input type="text" name="title" id="title" class="w-full py-1 border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" required />
+                            <input type="text" 
+                                    name="title" 
+                                    id="title" 
+                                    class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
+                                    placeholder="e.g. '3 Bedroom Villa in Paphos, Cyprus'" 
+                                    required 
+                            />
                             <button class="flex px-4 py-1 bg-gray-300 hover:bg-gray-400 rounded">
                                 <span class="pr-2">Generate</span>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,11 +31,11 @@ Add your form or content for adding a property here
                         </div>
                     </div>
 
-                    <div class="w-full pt-5">
-                        <label for="description">{{ __('Property Description')  }} <span class="text-gray-500">{{ __('2000 characters recommended') }}</span></label>
+                    <div class="w-full py-5">
+                        <label for="description" class="required-field">{{ __('Property Description')  }} <span class="text-gray-500">{{ __('2000 characters recommended') }}</span></label>
                         <div class="flex gap-5">
                             <div class="w-full">
-                                <textarea class="h-32 w-full py-1 border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" required></textarea> 
+                                <textarea id="description" class="w-full h-64 text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" required></textarea> 
                                 <span class="text-sm text-gray-400">2000 characters</span>
                             </div>
                             <div>
@@ -49,4 +52,4 @@ Add your form or content for adding a property here
             </div>
         </div>
     </div>
-</form>
+</div>

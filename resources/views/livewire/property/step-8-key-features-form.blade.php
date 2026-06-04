@@ -32,6 +32,7 @@ Add your form or content for adding a property here
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Key Features')  }}
                     </h3>
+                    <p class="mb-5 text-sm text-gray-600">{{ __('Tick the key features of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
                      <livewire:accordion-key-features />
                 </div>  
             </div>
