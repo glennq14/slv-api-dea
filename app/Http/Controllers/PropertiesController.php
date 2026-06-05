@@ -39,8 +39,7 @@ class PropertiesController extends Controller
      */
     public function create()
     {
-        $page = 1;
-        return view("properties.create" , compact('page'));
+        return view("properties.create");
     }
 
     /**
@@ -54,18 +53,17 @@ class PropertiesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Property $property, Request $id)
     {
-        $property = Property::findOrFail($id);
         return view("properties.show", compact('property'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Property $property, Request $request)
     {
-        return view("properties.edit");
+        return view("properties.edit", compact('property'));
     }
 
     /**
