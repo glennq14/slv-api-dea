@@ -93,7 +93,9 @@
                     @endif
                 @else
                 <!---------BACK BUTTON----------->
-                    <button wire:click="previousStep" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded mr-1 min-w-[130px]">Back</button>
+                    <a href="{{ route('properties.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded mr-1 min-w-[130px]">
+                        &larr; Back
+                    </a>
                 <!---------EDIT BUTTON----------->
                     <button id="nextBtn"  wire:click="$dispatch('parentUpdateButtonTriggered')" wire:loading.class="opacity-50" class="px-7 py-2 bg-red-500 text-white rounded-md hover:bg-red-500">
                         <span wire:loading.remove>&#x21bb; {{ __('Update') }} </span>
