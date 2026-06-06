@@ -10,7 +10,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('v1')
         ->name('api.')
         ->group( function () {
-            Route::apiResource('properties', Api\V1\PropertiesController::class);
+            Route::apiResource('properties', V1PropertiesController::class);
             Route::get('properties/reference/{reference}', [V1PropertiesController::class, 'showByReference']);
 
             Route::apiResource('users', V1UsersController::class);

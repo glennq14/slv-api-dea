@@ -6,14 +6,19 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\Property;
-use App\Models\PropertyPrice;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 
 new class extends Component
 {
     /***********************
      * Validateion 
      ************************/
-    #[Validate('required|string')]
+    // #[Validate('required|string|unique:reference,id')]
+    // public string $edit_reference;
+    
+    // #[Validate('required|string|unique:properties')] //create only
+    // #[Validate('required|string|unique:properties,id')] //edit only
     public string $reference;
 
     #[Validate('required|numeric')]
@@ -82,6 +87,27 @@ new class extends Component
     // list of property type
     public $propertyTypes = [];
 
+    //for property edit
+    public ?Property $property = null;
+
+    public function updatedReference(string $value)
+    {
+        $this->reference = strtoupper($value);
+    }
+
+    protected function rules()
+    {   
+        // dd($this->property);
+
+        return [
+            'reference' => [
+                'required',
+                'string',
+                Rule::unique('properties', 'reference')
+                    ->ignore($this->property?->id)
+            ]
+        ];
+    }
 
     protected function validationAttributes()
     {
@@ -92,11 +118,37 @@ new class extends Component
     }
 
     // get the list of property types
-    public function mount(PropertyType $propertyTypes)
+    public function mount(PropertyType $propertyTypes, Property $property)
     {
+        if ($property && $property->exists) {
+            $this->property             = $property;
+            $this->reference            = $property->reference;
+            $this->basic_price          = $property->price->basic_price ?? 0;
+            $this->area_size            = $property->area_size;
+            $this->bedrooms             = $property->bedrooms;
+            $this->bathrooms            = $property->bathrooms;
+            $this->plot                 = $property->plot;
+            $this->plot_description     = $property->plot_description;
+            $this->agent_id             = $property->agent_id;
+            $this->year_of_construction = $property->year_of_construction;
+            $this->pool_description     = $property->pool_description;
+            $this->property_type_id     = $property->property_type_id;
+            $this->commission           = $property->price->commission ?? 0;
+            $this->listing_type         = $property->listing_type;
+            $this->communal_charges     = $property->price->communal_charges ?? 0;
+            $this->plan_zone            = $property->plan_zone;
+            $this->sea_view             = $property->sea_view;
+            $this->for_sale_board       = $property->for_sale_board;
+            $this->pool                 = $property->pool;
+            $this->is_poa               = $property->price->is_poa ?? 0;
+            $this->title_deeds          = $property->title_deeds;
+            $this->leasehold            = $property->leasehold;
+        }
+        
         $this->propertyTypes = $propertyTypes->orderBy('name', 'asc')->get();
-    }
+    }   
 
+    //Create
     #[On('parentNextStepButtonTriggered')]
     public function hundleNextStepButtonTriggered()
     {   
@@ -116,12 +168,33 @@ new class extends Component
             $newProperty = Property::create($validatedData);
             $newProperty->price()->create($price);
 
-            $this->dispatch( 'proceed-to-next-step', property_id: $newProperty->id );
+            $this->dispatch( 'proceed-to-next-step', property_id: $this->property->id );
+                
 
         } catch (ValidationException $e) {
             Log::info('User failed form validation.');
-            dd($e);
+            // dd($e);
             throw $e;
+        }
+    }
+
+    //Update
+    #[On('parentUpdateButtonTriggered')]
+    public function handleUpdateProperty(Request $request)
+    {
+        $validatedData = $this->validate();
+        if ($this->property && $this->property->exists) {
+            $price = [
+                'is_poa' => $validatedData['is_poa'],
+                'basic_price' => $validatedData['basic_price'],
+                'commission' => $validatedData['basic_price'],
+                'communal_charges' => $validatedData['communal_charges']
+            ];
+
+            $this->property->update($validatedData);
+            $this->property->price()->create($price);
+
+            session()->flash('status', 'Property updated successfully');
         }
     }
 }
@@ -132,6 +205,11 @@ new class extends Component
 Basic information about the property 
 ------------------------------------->
 <div>
+    @if (session()->has('status'))
+        <div class="mb-4 p-2 bg-green-100 text-green-700 rounded text-sm max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+            {{  session('status') }}
+        </div>
+    @endif
     <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
     </div>
@@ -433,4 +511,9 @@ Basic information about the property
             </div>
         </div>
     </div>
+    @if (session()->has('error'))
+        <div class="bg-red-500 text-white p-2">
+            {{ session('error') }}
+        </div>
+    @endif
 </div>

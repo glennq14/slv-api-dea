@@ -5,20 +5,33 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\DB;
+use App\Models\Property;
 
 class MultiStepForm extends Component
 {
     public $currentStep = 1;
     public $totalSteps = 10;
 
-    public $newPropertyId = 0;
+    public $property = [];
 
+    public $isEdit = false;
     public string $updatedStep;
+
+    //from controller to view to component
+    public function mount(Property $editProperty)
+    {
+        $this->property = $editProperty;
+
+        if ($editProperty->getKey()) {
+            $this->isEdit = true;
+        } 
+    }
 
     public function updatedStep(int $value)
     {   
 
         $this->updatedStep = $value;
+        
         if ($value == 2) {
             $this->dispatch('load-map');
         }
@@ -29,9 +42,9 @@ class MultiStepForm extends Component
     }
 
     #[On('proceed-to-next-step')]
-    public function nextStep($property_id = 0)
+    public function nextStep(Property $property)
     {   
-        $this->newPropertyId = $property_id;
+        $this->property = $property;
 
         if ( $this->currentStep < $this->totalSteps ) {
             $this->currentStep++;
@@ -40,29 +53,12 @@ class MultiStepForm extends Component
         $this->updatedStep($this->currentStep);
     }
 
+    //Previous Step button action
     public function previousStep()
     {
         $this->currentStep--;
         $this->updatedStep($this->currentStep);
     }
-
-    public function validateStep()
-    {
-        if ( $this->currentStep == 3 ) {
-
-            dd('test');
-
-            // $rules = [
-            //     ''
-            // ]
-        }
-    }
-
-    public function mount()
-    {
-
-    }
-    
     public function render()
     {
         return view('livewire.multi-step-form');

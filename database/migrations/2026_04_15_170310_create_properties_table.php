@@ -20,7 +20,9 @@ return new class extends Migration
             $table->foreign('property_type_id')
                 ->references('id')
                 ->on('property_types');
-            $table->string('reference', 45)->index()
+            $table->string('reference', 45)
+                ->unique()
+                ->index()
                 ->comment('Unique reference for this price entry');
             $table->longText('description')
                 ->comment('The full description of the property')

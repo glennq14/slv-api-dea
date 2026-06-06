@@ -27,3 +27,11 @@
 /* WIDTH AND HEIGHT*/
 .w-16 {width: 64px;}
 .h-16 {height: 64px;}
+
+.required-field::after {
+  content: " *";
+  color: red;
+}
+.text-red {color:red }
+.bg-red-500 {background-color: #ff3228;}
+.bg-red-500:hover {background-color: #dd0b00;}`

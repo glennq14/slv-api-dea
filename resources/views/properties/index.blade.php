@@ -136,7 +136,7 @@
                                     </p>
                                 </td>
                                 <td class="px-5 py-5 text-sm text-right bg-white border-b border-gray-200">
-                                    <a href="#" class="mr-4 text-blue-600 visited:text-purple-600 text-semi-bold"> Edit </a>
+                                    <a href="/properties/{{ $property->id }}/edit" class="mr-4 text-blue-600 visited:text-purple-600 text-semi-bold"> Edit </a>
                                     <button
                                     type="button"
                                     class="inline-block text-gray-500 action-btn hover:text-gray-700"

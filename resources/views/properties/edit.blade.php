@@ -12,8 +12,8 @@
             </h2>
         </div>
     </div>
-
-    <livewire:multi-step-form :property="$property"/>
+    
+    <livewire:multi-step-form :editProperty="$property"/>
 
     <br /><br /><br />
 </x-app-layout>

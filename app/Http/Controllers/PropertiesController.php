@@ -61,7 +61,7 @@ class PropertiesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Property $property, Request $request)
+    public function edit(Property $property)
     {
         return view("properties.edit", compact('property'));
     }

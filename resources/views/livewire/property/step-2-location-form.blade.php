@@ -3,7 +3,7 @@
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
-use App\Models\PropertyAddress;
+use App\Models\Property;
 
 new class extends Component
 {
@@ -98,18 +98,19 @@ new class extends Component
     #[Validate('required|string')]
     public string $map_accuracy;
 
-    #[Validate('required|numeric')]
-    public int $property_id;
+    public ?Property $property = null;
 
-    public function mount(): void
+    public function mount(Property $property): void
     {
+        dd($property);
+        $this->property =  $property;
         $this->regions = array_keys($this->regionTownMap);
     }
 
     public function updatedRegion(string $region)
     { 
             $this->towns = $this->regionTownMap[$region] ?? [];
-            $this->town = '';
+            $this->town_city = '';
             $this->selectedLocality = [];
     }
 
@@ -136,7 +137,6 @@ Property Location input form
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Location')  }}
                     </h3>
-                    <input type="hidden" wire:modal.live="property_id" value="{{ propertyId }}"/>
                     <p class="mb-5 text-sm text-gray-600">{{ __('Select the location of the property. This will help your property show up in the correct location on the map and improve search results for location-based searches.') }}</p>
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                         <div>
