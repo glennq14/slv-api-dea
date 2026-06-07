@@ -4,6 +4,8 @@ use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use App\Models\Property;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 new class extends Component
 {
@@ -70,8 +72,6 @@ new class extends Component
     ];
 
     public string $selectedRegion;
-    public array $selectedTown;
-    public array $selectedLocality;
 
     /*******************
      * Validartion
@@ -82,20 +82,20 @@ new class extends Component
     #[Validate('required|string')]
     public string $town_city;
 
-    #[Validate('required|string')]
-    public string $locality;
+    #[Validate('required')]
+    public string $locality = 'All Locality';
 
-    #[Validate('required|decimal:10.8')]
+    #[Validate('required|numeric|between:-90,90')]
     public float $latitude;
 
-    #[Validate('required|decimal:11.8')]
-    public float $longtitude;
+    #[Validate('required|numeric|between:-180,180')]
+    public float $longitude;
 
     #[Validate('required|string')]
     public string $map_address;
 
-    #[Validate('required|string')]
-    public string $map_accuracy;
+    #[Validate('required|numeric')]
+    public int $accuracy = 1000;
 
     public bool $isEdit = false;
 
@@ -106,6 +106,19 @@ new class extends Component
         $this->property =  $property;
         $this->regions  = array_keys($this->regionTownMap);
         $this->isEdit   = $isEdit;
+
+        if ($property && $property->address()->exists()) {
+            $this->region       = $property->address->region;
+            $this->town_city    = $property->address->town_city;
+            $this->locality     = $property->address->locality;
+            $this->latitude     = $property->address->latitude;
+            $this->longitude    = $property->address->longitude;
+            $this->map_address  = $property->address->map_address;
+            $this->accuracy     = $property->address->accuracy;
+
+            $this->towns            = $this->regionTownMap[$property->address->region];
+            $this->selectedRegion   = $property->address->region;
+        }
     }
 
     public function updatedRegion(string $region)
@@ -113,24 +126,40 @@ new class extends Component
             $this->selectedRegion = $region;
             $this->towns = $this->regionTownMap[$region] ?? [];
             $this->town_city = '';
-            $this->selectedLocality = [];
     }
 
     #[On('parentNextStepButtonTriggered')]
     public function hundleNextStepButtonTriggered(int $currentStep)
     {
-        $this->validate();
+        try {
+            $validatedData = $this->validate();
+            $this->property->create($validatedData);
+
+            $this->dispatch( 'proceed-to-next-step', property_id: $this->property->id);
+         } catch (ValidationException $e) {
+            Log::info('Property validation error. Please double check.');
+            throw $e;
+        }
     }
 
     #[On('parentUpdateButtonTriggered')]
     public function handleUpdateProperty()
-    {
-        $validatedData = $this->validate();
-        if ($this->property && $this->property->exists) {
-            dd($validatedData);
-        }
+    {   
+        try {
+            $validatedData = $this->validate();
 
-        session()->flash('status', 'Property updated successfully');
+            $this->property->address()->updateOrCreate([
+                    'property_id' => $this->property->id,
+                ],
+                $validatedData
+            );
+
+            session()->flash('status', 'Property updated successfully');
+         } catch (ValidationException $e) {
+            Log::info('Property validation error. Please double check.');
+            throw $e;
+        }
+        
     }
 }
 
@@ -139,17 +168,19 @@ new class extends Component
 Property Location input form
 ------------------------------------------------------->
 <div class="">
+    <?php /*
     @if (session()->has('status'))
         <div class="mb-4 p-2 bg-green-100 text-green-700 rounded text-sm max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
             {{  session('status') }}
         </div>
     @endif
+    */ ?>
     <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
     </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg {{ $isEdit ? 'bg-orange-100/30' : '' }}">
+            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg {{ $isEdit ? 'bg-orange-100/40' : '' }}">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Location')  }}
@@ -176,7 +207,7 @@ Property Location input form
                                     </option>
                                 @endforeach
                             </select>
-                            @error('town') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('town') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Locality') }}</label>
@@ -207,17 +238,28 @@ Property Location input form
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                         <div>
                             <label for="latitude" class="required-field font-md block text-black text-sm mb-1">{{ __('Latitude') }}</label>
-                            <input type="number" wire:model.live="latitude" id="latitude" class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-                            @error('latitude') <span class="text-red">{{ $message }}</span> @enderror
+                            <input type="number"
+                                wire:model.ive="latitude" 
+                                id="latitude" 
+                                class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                            @error('latitude') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label for="longtitude" class="required-field font-md block text-black text-sm mb-1">{{ __('Longtitude') }}</label>
-                            <input type="number" wire:model.live="longtitude" id="longtitude" class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-                            @error('latitude') <span class="text-red">{{ $message }}</span> @enderror
+                            <label for="longitude" class="required-field font-md block text-black text-sm mb-1">{{ __('Longtitude') }}</label>
+                            <input type="number" 
+                                wire:model.live="longitude" 
+                                id="longitude" 
+                                class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                x-data
+                                x-init="$watch('$el.value', value => $el.dispatchEvent(new Event('input', { bubbles: true })))"
+                                required 
+                            />
+                            @error('longitude') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
-                            <select name="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select wire:model="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="1000" default>1000</option>
                                 <option value="5000" >5000</option>
                             </select>
@@ -225,8 +267,15 @@ Property Location input form
                     </div>
                     <div>
                         <label class="required-field text-sm">Map Address</label>
-                        <input type="text" wire:model.live="map_address" id="mapAddress" class="required-fields  w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                        @error('map_address') <span class="text-red">{{ $message }}</span> @enderror
+                        <input type="text" 
+                            wire:model.live="map_address" 
+                            id="mapAddress" 
+                            class="required-fields  w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            x-data
+                            x-init="$watch('$el.value', value => $el.dispatchEvent(new Event('input', { bubbles: true })))"
+                            required
+                        />
+                        @error('map_address') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                     </div>
                     <div wire:ignore class="gmap border h-[700px] mt-4 bg-white p-1">
                         <div id="gmap" class="h-full">
@@ -236,6 +285,35 @@ Property Location input form
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <div x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 3000)"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            aria-modal="true" 
+            role="dialog">
+
+            <!-- Modal Box -->
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9l6 6M15 9l-6 6" />
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ __("Oops! Some fields need your attention.") }} </h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500"></p>
+                </div>
+            </div>
+        </div>
+    @endif
     @if (session()->has('status'))
         <div x-data="{ show: true }"
             x-show="show"
