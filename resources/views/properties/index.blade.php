@@ -14,7 +14,7 @@
         <div class="py-3 mx-auto max-w-10xl sm:px-6 lg:px-8">
             <div class="mb-5">
                 <a href="{{ url('properties/create') }}" class="px-5 py-2 text-white bg-blue-400 rounded-md hover:bg-blue-500">
-                    {{ __('+ Create New Property')  }}
+                    {{ __('+ Create Property')  }}
                 </a>
             </div>
             <div class="w-full p-5 bg-white border rounded mt b ">

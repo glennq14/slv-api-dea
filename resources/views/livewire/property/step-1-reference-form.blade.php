@@ -14,11 +14,11 @@ new class extends Component
     /***********************
      * Validateion 
      ************************/
-    #[Validate('required|string|unique:properties,reference,id')]
+    // #[Validate('required|string|unique:properties,id')]
     public string $edit_reference;
     
-    #[Validate('required|string|unique:properties')] //create only
     // #[Validate('required|string|unique:properties,id')] //edit only
+    #[Validate('required|string|unique:properties,reference')]
     public string $reference;
 
     #[Validate('required|numeric')]
@@ -81,6 +81,8 @@ new class extends Component
     #[Validate('nullable')]
     public string $leasehold = 'yes';
 
+    public $isEdit = false;
+
     // check parent next button is click/triggered
     public $isParentNextButtonTriggered  = '';
 
@@ -96,24 +98,26 @@ new class extends Component
     }
 
     protected function rules()
-    {   
-        return [
-            // 'reference' => [
-            //     'required',
-            //     'string',
-            //     Rule::unique('properties', 'reference')
-            //         ->ignore($this->property?->id)
-            // ],
-            'year_of_construction' => 'required|integer|digits:4|min:1900|max:' . date('Y')
-        ];
+    {
+        if ($this->isEdit) {
+            return [
+                'edit_reference' => [
+                    'required',
+                    'string',
+                    Rule::unique('properties', 'reference')->ignore($this->property->id),
+                ],
+                'year_of_construction' => 'required|integer|digits:4|min:1900|max:' . date('Y')
+            ];
+        }
+        return ['year_of_construction' => 'required|integer|digits:4|min:1900|max:' . date('Y')];
     }
 
     protected function validationAttributes()
     {
         return [
-            'edit_reference' => 'Reference',
-            'property_type_id' => 'Property Type',
-            'agent_id' => 'Agent'
+            'edit_reference' => 'reference',
+            'property_type_id' => 'property Type',
+            'agent_id' => 'agent'
         ];
     }
 
@@ -121,9 +125,10 @@ new class extends Component
     public function mount(PropertyType $propertyTypes, Property $property)
     {
         if ($property && $property->exists) {
+            $this->isEdit               = true;
             $this->property             = $property;
             $this->edit_reference       = $property->reference;
-            $this->reference            = $property->reference;
+            $this->reference            = 'XDIRTY-CREATE1';
             $this->basic_price          = $property->price->basic_price ?? 0;
             $this->area_size            = $property->area_size;
             $this->bedrooms             = $property->bedrooms;
@@ -152,15 +157,16 @@ new class extends Component
     //Create
     #[On('parentNextStepButtonTriggered')]
     public function hundleNextStepButtonTriggered()
-    {   
+    { 
         try {
-
+            
+            $this->edit_reference = 'XDIRTY-CREATE1';
             $validatedData = $this->validate();
-
+            unset($validatedData['edit_reference']);
             $price = [
                 'is_poa' => $validatedData['is_poa'],
                 'basic_price' => $validatedData['basic_price'],
-                'commission' => $validatedData['basic_price'],
+                'commission' => $validatedData['commission'],
                 'communal_charges' => $validatedData['communal_charges']
             ];
 
@@ -168,8 +174,8 @@ new class extends Component
 
             $newProperty = Property::create($validatedData);
             $newProperty->price()->create($price);
-
-            $this->dispatch( 'proceed-to-next-step', property: $newProperty);
+            
+            $this->dispatch( 'proceed-to-next-step', property_id: $newProperty->id);
                 
 
         } catch (ValidationException $e) {
@@ -183,16 +189,18 @@ new class extends Component
     public function handleUpdateProperty(Request $request)
     {
         $validatedData = $this->validate();
+        $validatedData['reference'] = $validatedData['edit_reference']; //change value of reference
+        unset($validatedData['edit_reference']);
         if ($this->property && $this->property->exists) {
             $price = [
                 'is_poa' => $validatedData['is_poa'],
                 'basic_price' => $validatedData['basic_price'],
-                'commission' => $validatedData['basic_price'],
+                'commission' => $validatedData['commission'],
                 'communal_charges' => $validatedData['communal_charges']
             ];
 
             $this->property->update($validatedData);
-            $this->property->price()->create($price);
+            $this->property->price()->update($price);
 
             session()->flash('status', 'Property updated successfully');
         }
@@ -204,12 +212,7 @@ new class extends Component
 <!------------------------------------
 Basic information about the property 
 ------------------------------------->
-<div>{{ var_dump($edit_reference) }}
-    @if ($edit_reference)
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
+<div>
     @if (session()->has('message'))
         <div class="alert alert-success">
             {{ session('message') }}
@@ -240,14 +243,18 @@ Basic information about the property
                                 id="reference" 
                                 class="uppercase placeholder:normal-case w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
                                 placeholder="SLV-1234"
-                                @if ( $edit_reference != null)
+                                @if ( $isEdit )
                                     wire:model.live="edit_reference"
                                 @else
                                     wire:model.live="reference"
                                 @endif
                                 required
                                 />
-                            @error('edit_reference') <span class="text-red">{{ $message }}</span> @enderror
+                            @if ( $isEdit )
+                                @error('edit_reference') <span class="text-red">{{ $message }}</span> @enderror
+                            @else
+                                @error('reference') <span class="text-red">{{ $message }}</span> @enderror
+                            @endif
                         </div>
                         <div>
                             <label for="basicPrice" class="required-field block text-black text-sm mb-1">{{ __('Price') }}</label>

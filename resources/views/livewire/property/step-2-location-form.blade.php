@@ -69,16 +69,15 @@ new class extends Component
             ]
     ];
 
-    #[Validate('required|string')]
-    public array $region;
+    public string $selectedRegion;
     public array $selectedTown;
     public array $selectedLocality;
 
     /*******************
      * Validartion
      ******************/
-    // #[Validate('required|string')]
-    // public string $region;
+    #[Validate('required|string')]
+    public string $region;
 
     #[Validate('required|string')]
     public string $town_city;
@@ -98,17 +97,19 @@ new class extends Component
     #[Validate('required|string')]
     public string $map_accuracy;
 
+    
+
     public ?Property $property = null;
 
     public function mount(Property $property): void
     {
-        dd($property->id);
         $this->property =  $property;
         $this->regions = array_keys($this->regionTownMap);
     }
 
     public function updatedRegion(string $region)
-    { 
+    {   
+            $this->selectedRegion = $region;
             $this->towns = $this->regionTownMap[$region] ?? [];
             $this->town_city = '';
             $this->selectedLocality = [];
@@ -117,7 +118,6 @@ new class extends Component
     #[On('parentNextStepButtonTriggered')]
     public function hundleNextStepButtonTriggered(int $currentStep)
     {
-        dd($currentStep);
         $this->validate();
     }
 }
@@ -163,7 +163,7 @@ Property Location input form
                         </div>
                         <div>
                             <label for="locality" class="required-field font-md block text-black text-sm mb-1">{{ __('Locality') }}</label>
-                            <select wire:model.live="locality" id="locality" @disabled(!$selectedTown) class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select wire:model.live="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="" selected class="text-gray-500">Select Locality</option>
                                
                             </select>

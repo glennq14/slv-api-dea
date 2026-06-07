@@ -12,17 +12,16 @@ class MultiStepForm extends Component
     public $currentStep = 1;
     public $totalSteps = 10;
 
-    public $property = [];
+    public ?Property $property = null;
 
     public $isEdit = false;
     public string $updatedStep;
 
     //from controller to view to component
-    public function mount(Property $editProperty)
+    public function mount(Property $editProperty, string $editMode = '')
     {
         $this->property = $editProperty;
-
-        if ($editProperty->getKey()) {
+        if ($editMode == 'editMode') {
             $this->isEdit = true;
         } 
     }
@@ -42,15 +41,22 @@ class MultiStepForm extends Component
     }
 
     #[On('proceed-to-next-step')]
-    public function nextStep(Property $property)
+    public function nextStep($property_id = 0)
     {   
-        $this->property = $property;
-        dd($property);
+        
+        $this->property = Property::find($property_id);
+        
         if ( $this->currentStep < $this->totalSteps ) {
             $this->currentStep++;
         }
         
         $this->updatedStep($this->currentStep);
+    }
+
+     #[On('editSelectedStep')]
+    public function hundleEditSelectedStep(int $step)
+    {
+        $this->currentStep = $step;
     }
 
     //Previous Step button action

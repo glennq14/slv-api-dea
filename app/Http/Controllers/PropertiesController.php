@@ -63,7 +63,8 @@ class PropertiesController extends Controller
      */
     public function edit(Property $property)
     {
-        return view("properties.edit", compact('property'));
+        $editMode = 'editMode';
+        return view("properties.edit", compact('property', $editMode));
     }
 
     /**
