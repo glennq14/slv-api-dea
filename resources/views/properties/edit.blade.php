@@ -8,7 +8,7 @@
     <div class="pt-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-               <span class="font-bold text-dry-orange">{{ __('Edit') }}</span> <span class="font-light text-gray-500">{{ __('Property') }}</span>
+               <span class="font-custom font-bold text-yellow-500/100 text-shadow-lg/30">{{ __('Edit') }}</span> <span class="font-custom font-thin text-gray-800">{{ __('Property') }}</span>
             </h2>
         </div>
     </div>

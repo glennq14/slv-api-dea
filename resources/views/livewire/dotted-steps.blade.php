@@ -28,28 +28,28 @@
                     <div class="flex py-3">
                         <div class="relative ring-2 rounded-full p-[11px] bg-[#01ADF1] ring-[#01ADF1]">
                             <div class="h-2.5 w-2.5 rounded-full bg-[#01ADF1] ring-0">
-                            </div>
-                                
-                                <span class="absolute mx-auto text-white text-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                    @if ($index != $step)
-                                        &#x1F5F8;
-                                    @else
-                                        &#9998;
-                                    @endif
-                                </span>
-                                
-                            </div>
-                            @if ( $index != 10 )
-                                <div class="w-20 flex items-center ml-0.5">
-                                    <hr class="border-t-2 border-[#01ADF1] w-full">
-                                </div>
-                            @endif
                         </div>
+                                
+                        <span class="absolute mx-auto text-white text-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            @if ($index != $step)
+                                &#x1F5F8;
+                            @else
+                                &#9998;
+                            @endif
+                        </span>
+                                
+                        </div>
+                        @if ( $index != 10 )
+                            <div class="w-20 flex items-center ml-0.5">
+                                <hr class="border-t-2 border-[#01ADF1] w-full">
+                            </div>
+                        @endif
+                    </div>
                     <div class="block">
                         @if (  $index == $step )
-                            <span class="text-bold text-dry-orange text-lg text-underline" style="margin-left: -15px;text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);"> {{ $name }}</span>
+                            <span class="text-yellow-500/100 text-bold text-lg text-underline -ml-4 text-shadow-lg" style="text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);"> {{ $name }}</span>
                         @else
-                            <span class="cursor-pointer hover:text-bold text-[#01ADF1] hover:text-green-400 hover:underline" 
+                            <span class="font-custom cursor-pointer hover:text-bold text-[#01ADF1] hover:text-blue-800" 
                                 wire:click="$dispatch('editSelectedStep', { step:{{ $index }} } )">{{ $index }} {{ $name }}</span>
 
                         @endif

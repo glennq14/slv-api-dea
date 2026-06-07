@@ -9,7 +9,7 @@
      <!-- Step 2 -->
     @if ( $currentStep == 2 )
         <livewire:dotted-steps :step="$currentStep" :isEdit="$isEdit" />
-        <livewire:property.step-2-location-form :property="$property" />
+        <livewire:property.step-2-location-form :property="$property" :isEdit="$isEdit"/>
     @endif
 
      <!-- Step 3 -->
@@ -21,7 +21,7 @@
      <!-- Step 4 -->
     @if ( $currentStep == 4 )
         <livewire:dotted-steps :step="$currentStep" :isEdit="$isEdit" />
-        <livewire:property.step-4-floor-plan-form :property="$property" />
+        <livewire:property.step-4-floor-plan-form :property="$property" :isEdit="$isEdit"/>
     @endif
 
      <!-- Step 5 -->

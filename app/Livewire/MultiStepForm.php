@@ -57,6 +57,8 @@ class MultiStepForm extends Component
     public function hundleEditSelectedStep(int $step)
     {
         $this->currentStep = $step;
+        $this->updatedStep($this->currentStep);
+        $this->isEdit = true;
     }
 
     //Previous Step button action

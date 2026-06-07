@@ -186,7 +186,7 @@ new class extends Component
 
     //Update
     #[On('parentUpdateButtonTriggered')]
-    public function handleUpdateProperty(Request $request)
+    public function handleUpdateProperty()
     {
         $validatedData = $this->validate();
         $validatedData['reference'] = $validatedData['edit_reference']; //change value of reference
@@ -202,7 +202,7 @@ new class extends Component
             $this->property->update($validatedData);
             $this->property->price()->update($price);
 
-            session()->flash('status', 'Property updated successfully');
+            session()->flash('status', 'Property has been successfully updated!');
         }
     }
 }
@@ -213,23 +213,23 @@ new class extends Component
 Basic information about the property 
 ------------------------------------->
 <div>
-    @if (session()->has('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
-    
+    <?php /*
     @if (session()->has('status'))
         <div class="mb-4 p-2 bg-green-100 text-green-700 rounded text-sm max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+            <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 8" />
+            </svg>
             {{  session('status') }}
         </div>
     @endif
+    */ ?>
     <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
     </div>
     <div class="py-6">
+    
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg  {{ $isEdit ? 'bg-orange-100/30' : '' }}">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Basic')  }}
@@ -251,9 +251,9 @@ Basic information about the property
                                 required
                                 />
                             @if ( $isEdit )
-                                @error('edit_reference') <span class="text-red">{{ $message }}</span> @enderror
+                                @error('edit_reference') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                             @else
-                                @error('reference') <span class="text-red">{{ $message }}</span> @enderror
+                                @error('reference') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                             @endif
                         </div>
                         <div>
@@ -273,7 +273,7 @@ Basic information about the property
                                     {{ __('GBP') }}
                                 </div>
                             </div>
-                             @error('basic_price') <span class="text-red">{{ $message }}</span> @enderror
+                             @error('basic_price') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="poa" class="block text-black text-sm mb-1">&nbsp;</label>
@@ -293,7 +293,7 @@ Basic information about the property
     ------------------------------------->
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg {{ $isEdit ? 'bg-orange-100/30' : '' }}">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Property Details')  }}
@@ -311,7 +311,7 @@ Basic information about the property
                                     <option value="{{ $propertyType->id }}" wire:key="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
                                 @endforeach
                             </select>
-                            @error('property_type_id') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('property_type_id') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-2 flex items-center">
                             <div>
@@ -351,12 +351,12 @@ Basic information about the property
                                 value="0" 
                                 class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
                                 required />
-                            @error('bedrooms') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('bedrooms') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="bathrooms" class="required-field block text-black text-sm mb-1">{{ __('Bathrooms') }}</label>
                             <input type="number" wire:model.live="bathrooms" id="bathrooms" value="0" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-                            @error('bathrooms') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('bathrooms') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
@@ -368,7 +368,7 @@ Basic information about the property
                                     {{ __('m') }}<span class="text-[0.65rem] align-super mb-2">{{ __('2') }}</span>
                                 </div>
                             </div>
-                             @error('area_size') <span class="text-red">{{ $message }}</span> @enderror
+                             @error('area_size') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="plot" class="required-field block text-black text-sm mb-1 mb-1">{{ __('Plot') }}</label>
@@ -379,12 +379,12 @@ Basic information about the property
                                     {{ __('m') }}<span class="text-[0.65rem] align-super mb-2">{{ __('2') }}</span>
                                 </div>
                             </div>
-                            @error('plot') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('plot') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="plot_description" class="required-field block text-black text-sm mb-1">{{ __('Plot Description') }}</label>
                             <input type="text" wire:model.live="plot_description" placeholder="e.g. Corner Plot, flat, slight slope, cul-de-sac" id="plot_description" class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-                            @error('plot_description') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('plot_description') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
@@ -397,12 +397,12 @@ Basic information about the property
                                 <option value="3">Cheryl Hann</option>
                                 <option value="4">Gabbie Simpson</option>
                             </select>
-                            @error('agent_id') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('agent_id') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="year_of_construction" class="required-field block text-black text-sm mb-1">{{ __('Year of Construction') }}</label>
                             <input type="number" wire:model.live="year_of_construction" placeholder="e.g. 2005" id="year_of_construction" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-                            @error('year_of_construction') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('year_of_construction') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="pool" class="block text-black text-sm mb-1">{{ __('Pool') }}</label>
@@ -422,7 +422,7 @@ Basic information about the property
                         <div class="w-1/2">
                             <label for="pool_description" class="required-field block text-black text-sm mb-1">{{ __('Pool Description') }}</label>
                             <input type="text" wire:model.live="pool_description" id="pool_description" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter pool details (e.g. Infinity, Heated, Shared)" required />
-                            @error('pool_description') <span class="text-red">{{ $message }}</span> @enderror
+                            @error('pool_description') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
@@ -435,7 +435,7 @@ Basic information about the property
                                 %
                             </div>
                         </div>
-                        @error('commission') <span class="text-red">{{ $message }}</span> @enderror
+                        @error('commission') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                     </div>
                 </div>  
             </div>
@@ -448,7 +448,7 @@ Basic information about the property
     ------------------------------------->
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg {{ $isEdit ? 'bg-orange-100/30' : '' }} ">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                         {{ __('Specific')  }}
@@ -536,6 +536,35 @@ Basic information about the property
     @if (session()->has('error'))
         <div class="bg-red-500 text-white p-2">
             {{ session('error') }}
+        </div>
+    @endif
+    @if (session()->has('status'))
+        <div x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 2000)"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            aria-modal="true" 
+            role="dialog">
+
+            <!-- Modal Box -->
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                    <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 8" />
+                    </svg>
+                </div>
+                
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('status') }}</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500"></p>
+                </div>
+            </div>
         </div>
     @endif
 </div>
