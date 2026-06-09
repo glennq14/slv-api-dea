@@ -11,8 +11,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
-#[Fillable(['company','name', 'email', 'password'])]
+#[Fillable(['company','name', 'email', 'role_id', 'password'])]
 #[Hidden(['password', 'remember_token', 'email_verified_at'])]
 class User extends Authenticatable
 {
@@ -32,8 +33,25 @@ class User extends Authenticatable
         ];
     }
 
+    protected static function booted(): void
+    {
+        
+        // Automatically filter out admin users from general queries
+        static::addGlobalScope('exclude_admins', function (Builder $builder) {
+            $exceptRoleIds = [5,6];
+            $builder->whereNotIn('role_id', $exceptRoleIds);
+        });
+    }
+
     public function properties(): HasMany
     {
-        return $this->hasMany(Property::class, 'author_id');
+        return $this->hasMany(Property::class, 'created_by');
     }
+
+    public function propertyManagingAgent(): HasMany
+    {
+        return $this->hasMany(Property::class, 'managing_agent_user_id');
+    }
+
+    
 }

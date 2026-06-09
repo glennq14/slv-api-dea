@@ -3,44 +3,46 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Validation\ValidationException;
 
 class AccordionKeyFeatures extends Component
 {
     public ?int $openItem = null;
 
-    public $items = [
+    
+    public $keyFeature = [
         [
             'id' => 1,
             'title' => 'Views',
             'fields' => [
                 [
                     'label' => 'Sea and Mountain Views',
-                    'name' => 'views[sea_and_mountain_views]',
+                    'name' => 'keyFeature.views.sea_and_mountain_views',
                     'value' => false
                 ],
                 [
                     'label' => 'Sea Views',
-                    'name' => 'views[sea_views]',
+                    'name' => 'keyFeature.views.sea_views',
                     'value' => false
                 ],
                 [
                     'label' => 'Panoramic Views',
-                    'name' => 'views[panoramic_views]',
+                    'name' => 'keyFeature.views.panoramic_views',
                     'value' => false
                 ],
                 [
-                    'label' => 'Views_of_Town_and_Sea',
-                    'name' => 'views[views_of_town_and_sea]',
+                    'label' => 'Views of Town and Sea',
+                    'name' => 'keyFeature.views.views_of_town_and_sea',
                     'value' => false
                 ],
                 [
                     'label' => 'Overlooking the Marina',
-                    'name' => 'views[overlooking_the_marina]',
+                    'name' => 'keyFeature.views.overlooking_the_marina',
                     'value' => true
                 ],
                 [
                     'label' => 'Overlooking the Golf Course',
-                    'name' => 'views[overlooking_the_golf_course]',
+                    'name' => 'keyFeature.views.overlooking_the_golf_course',
                     'value' => false
                 ],
             ]
@@ -51,42 +53,42 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label' => 'East',
-                    'name' => 'orientation[east]',
+                    'name' => 'keyFeature.orientation.east',
                     'value' => false
                 ],
                 [
                     'label' => 'South',
-                    'name' => 'orientation[south]',
+                    'name' => 'keyFeature.orientation.south',
                     'value' => false
                 ],
                 [
                     'label' => 'Southwest',
-                    'name' => 'orientation[southwest]',
+                    'name' => 'keyFeature.orientation.southwest',
                     'value' => false
                 ],
                 [
                     'label' => 'Southeast',
-                    'name' => 'orientation[southeast]',
+                    'name' => 'keyFeature.orientation.southeast',
                     'value' => false
                 ],
                 [
                     'label' => 'West',
-                    'name' => 'orientation[west]',
+                    'name' => 'keyFeature.orientation.west',
                     'value' => false
                 ],
                 [
                     'label' => 'North',
-                    'name' => 'orientation[north]',
+                    'name' => 'keyFeature.orientation.north',
                     'value' => false
                 ],
                 [
                     'label' => 'Northwest',
-                    'name' => 'orientation[northwest]',
+                    'name' => 'keyFeature.orientation.northwest',
                     'value'=> false
                 ],
                 [
                     'label' => 'Northeast',
-                    'name' => 'orientation[northeast]',
+                    'name' => 'keyFeature.orientation.northeast',
                     'value' => false
                 ],
                 
@@ -98,33 +100,33 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label' => 'Covered Parking',
-                    'name' => 'private_parking[covered_parking]',
+                    'name' => 'keyFeature.private_parking.covered_parking',
                     'value' => false
 
                 ],
                 [
                     'label' => 'Uncovered Parking',
-                    'name' => 'private_parking[uncovered_parking]',
+                    'name' => 'keyFeature.private_parking.uncovered_parking',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Automatic Gate',
-                    'name' => 'private_parking[assisted_garage_door]',
+                    'name' => 'keyFeature.private_parking.assisted_garage_door',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Garage N Cars',
-                    'name' => 'private_parking[garage_n_cars]',
+                    'name' => 'keyFeature.private_parking.garage_n_cars',
                     'value'=> ['', false]
                 ],
                 [
                     'label'=> 'Carport N Cars',
-                    'name' => 'private_parking[carport_n_cars]',
+                    'name' => 'keyFeature.private_parking.carport_n_cars',
                     'value'=> ['', false]
                 ],
                 [
                     'label'=> 'Parking Spaces',
-                    'name' => 'private_parking[parking_spaces]',
+                    'name' => 'keyFeature.private_parking.parking_spaces',
                     'value'=> false
                 ]
             ]
@@ -135,53 +137,53 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label' => 'Open Kitchen',
-                    'name' => 'kitchen[open_kitchen]',
+                    'name' => 'keyFeature.kitchen.open_kitchen',
                     'value' => false
 
                 ],
                 [
                     'label' => 'Fitted Kitchen',
-                    'name' => 'kitchen[fitted_kitchen]',
+                    'name' => 'keyFeature.kitchen.fitted_kitchen',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Kitchenette',
-                    'name' => 'kitchen[kitchenette]',
+                    'name' => 'keyFeature.kitchen.kitchenette',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Breakfast Bar',
-                    'name' => 'kitchen[breakfast_bar]',
+                    'name' => 'keyFeature.kitchen.breakfast_bar',
                     'value'=> false
                 ],
                 [
                     'label'=> 'L-shaped Kitchen',
-                    'name' => 'kitchen[l_shaped_kitchen]',
+                    'name' => 'keyFeature.kitchen.l_shaped_kitchen',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Pantry',
-                    'name' => 'kitchen[pantry]',
+                    'name' => 'keyFeature.kitchen.pantry',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Marble Countertop',
-                    'name' => 'kitchen[marble_countertop]',
+                    'name' => 'keyFeature.kitchen.marble_countertop',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Granite Countertop',
-                    'name' => 'kitchen[granite_countertop]',
+                    'name' => 'keyFeature.kitchen.granite_countertop',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Silestone Countertop',
-                    'name' => 'kitchen[silestone_countertop]',
+                    'name' => 'keyFeature.kitchen.silestone_countertop',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Cedar Countertop',
-                    'name' => 'kitchen[cedar_countertop]',
+                    'name' => 'keyFeature.kitchen.cedar_countertop',
                     'value'=> false
                 ]
             ]
@@ -192,142 +194,142 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label'=> "Maid's Room",
-                    'name' => 'extras[maids_room]',
+                    'name' => 'keyFeature.extras.maids_room',
                     'value'=> false
                 ],
                 [
                     'label'=> "Storage/Room",
-                    'name' => 'extras[storage_room]',
+                    'name' => 'keyFeature.extras.storage_room',
                     'value'=> false
                 ],
                 [
                     'label'=> "Sauna",
-                    'name' => 'extras[sauna]',
+                    'name' => 'keyFeature.extras.sauna',
                     'value'=> false
                 ],
                 [
                     'label'=> "Laundry Room",
-                    'name' => 'extras[laudry_room]',
+                    'name' => 'keyFeature.extras.laudry_room',
                     'value'=> false
                 ],
                 [
                     'label'=> "Cinema/TV",
-                    'name' => 'extras[cinema_tv]',
+                    'name' => 'keyFeature.extras.cinema_tv',
                     'value'=> false
                 ],
                 [
                     'label'=> "Wine Cellar",
-                    'name' => 'extras[wine_cellar]',
+                    'name' => 'keyFeature.extras.wine_cellar',
                     'value'=> false
                 ],
                 [
                     'label'=> "Bar",
-                    'name' => 'extras[bar]',
+                    'name' => 'keyFeature.extras.bar',
                     'value'=> false
                 ],
                 [
                     'label'=> "Private Security",
-                    'name' => 'extras[private_security]',
+                    'name' => 'keyFeature.extras.private_security',
                     'value'=> false
                 ],
                 [
                     'label'=> "Security Room",
-                    'name' => 'extras[security_room]',
+                    'name' => 'keyFeature.extras.security_room',
                     'value'=> false
                 ],
                 [
                     'label'=> "Smoke Detectors",
-                    'name' => 'extras[smoke_detectors]',
+                    'name' => 'keyFeature.extras.smoke_detectors',
                     'value'=> false
                 ],
                 [
                     'label'=> "Security Shutters",
-                    'name' => 'extras[security_shutters]',
+                    'name' => 'keyFeature.extras.security_shutters',
                     'value'=> false
                 ],
                 [
                     'label'=> "Security Windows",
-                    'name' => 'extras[security_windows]',
+                    'name' => 'keyFeature.extras.security_windows',
                     'value'=> false
                 ],
                 [
                     'label'=> "Double Glazed Windows",
-                    'name' => 'extras[double_glazed_windows]',
+                    'name' => 'keyFeature.extras.double_glazed_windows',
                     'value'=> false
                 ],
                 [
                     'label'=> "Electric Blinds",
-                    'name' => 'extras[electric_blinds]',
+                    'name' => 'keyFeature.extras.electric_blinds',
                     'value'=> false
                 ],
                 [
                     'label'=> "Manual Shutters",
-                    'name' => 'extras[manual_shutters]',
+                    'name' => 'keyFeature.extras.manual_shutters',
                     'value'=> false
                 ],
                 [
                     'label'=> "Safe",
-                    'name' => 'extras[safe]',
+                    'name' => 'keyFeature.extras.safe',
                     'value'=> false
                 ],
                 [
                     'label'=> "Alarm",
-                    'name' => 'extras[alarm]',
+                    'name' => 'keyFeature.extras.alarm',
                     'value'=> false
                 ],
                 [
                     'label'=> "CCTV",
-                    'name' => 'extras[cctv]',
+                    'name' => 'keyFeature.extras.cctv',
                     'value'=> false
                 ],
                 [
                     'label'=> "Concierge",
-                    'name' => 'extras[concierge]',
+                    'name' => 'keyFeature.extras.concierge',
                     'value'=> false
                 ],
                 [
                     'label'=> "Concierge Services",
-                    'name' => 'extras[concierge_services]',
+                    'name' => 'keyFeature.extras.concierge_services',
                     'value'=> false
                 ],
                 [
                     'label'=> "Playroom",
-                    'name' => 'extras[playroom]',
+                    'name' => 'keyFeature.extras.playroom',
                     'value'=> false
                 ],
                 [
                     'label'=> "Tennis/Basket court",
-                    'name' => 'extras[tennis_basket_court]',
+                    'name' => 'keyFeature.extras.tennis_basket_court',
                     'value'=> false
                 ],
                 [
                     'label'=> "Gym/Fitness",
-                    'name' => 'extras[gym_fitness]',
+                    'name' => 'keyFeature.extras.gym_fitness',
                     'value'=> false
                 ],
                 [
                     'label'=> "Jacuzzi",
-                    'name' => 'extras[jacuzzi]',
+                    'name' => 'keyFeature.extras.jacuzzi',
                     'value'=> false
                 ],
                 [
                     'label'=> "BBQ",
-                    'name' => 'extras[bbq]',
+                    'name' => 'keyFeature.extras.bbq',
                     'value'=> false
                 ],
                 [
                     'label'=> "Fireplace",
-                    'name' => 'extras[fireplace]',
+                    'name' => 'keyFeature.extras.fireplace',
                     'value'=> false
                 ],
                 [
                     'label'=> "Gas Fireplace",
-                    'name' => 'extras[gas_fireplace]',
+                    'name' => 'keyFeature.extras.gas_fireplace',
                     'value'=> false
                 ],
                 [
                     'label'=> "Annex",
-                    'name' => 'extras[annex]',
+                    'name' => 'keyFeature.extras.annex',
                     'value'=> false
                 ]
             ],
@@ -338,52 +340,52 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label'=> 'Central Diesel Heating',
-                    'name'=> 'heating[central_diesel_heating]',
+                    'name'=> 'keyFeature.heating.central_diesel_heating',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Storage Heaters',
-                    'name'=> 'heating[storage_heaters]',
+                    'name'=> 'keyFeature.heating.storage_heaters',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Central Gas Heating',
-                    'name'=> 'heating[central_gas_heating]',
+                    'name'=> 'keyFeature.heating.central_gas_heating',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Central Oil Heating',
-                    'name'=> 'heating[central_oil_heating]',
+                    'name'=> 'keyFeature.heating.central_oil_heating',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Floor Heating',
-                    'name'=> 'heating[floor_heating]',
+                    'name'=> 'keyFeature.heating.floor_heating',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Solar Panels',
-                    'name'=> 'heating[solar_panels]',
+                    'name'=> 'keyFeature.heating.solar_panels',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Fireplace',
-                    'name'=> 'heating[fireplace]',
+                    'name'=> 'keyFeature.heating.fireplace',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Radiators',
-                    'name'=> 'heating[radiators]',
+                    'name'=> 'keyFeature.heating.radiators',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Gas Fireplace',
-                    'name'=> 'heating[gas_fireplace]',
+                    'name'=> 'keyFeature.heating.gas_fireplace',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Hydronic (boiler)',
-                    'name'=> 'heating[hydronic_boiler]',
+                    'name'=> 'keyFeature.heating.hydronic_boiler',
                     'value'=> false
                 ]
             ]
@@ -394,22 +396,22 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label'=> 'Pre-Installation',
-                    'name'=> 'air_conditioning[pre_installation]',
+                    'name'=> 'keyFeature.air_conditioning.pre_installation',
                     'value'=> false
                 ],
                 [
                     'label'=> 'VRV Air Conditioning',
-                    'name'=> 'air_conditioning[vrv_air_conditioning]',
+                    'name'=> 'keyFeature.air_conditioning.vrv_air_conditioning',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Room Unit Air Conditioning',
-                    'name'=> 'air_conditioning[room_unit_air_conditioning]',
+                    'name'=> 'keyFeature.air_conditioning.room_unit_air_conditioning',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Central Air Conditioning',
-                    'name'=> 'air_conditioning[central_air_conditioning]',
+                    'name'=> 'keyFeature.air_conditioning.central_air_conditioning',
                     'value'=> false
                 ]
             ]
@@ -420,77 +422,77 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label'=> 'Ceramic Cook Top',
-                    'name'=> 'inclusions[ceramic_cook_top]',
+                    'name'=> 'keyFeature.inclusions.ceramic_cook_top',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Hob',
-                    'name'=> 'inclusions[hob]',
+                    'name'=> 'keyFeature.inclusions.hob',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Structured Cabling',
-                    'name'=> 'inclusions[structured_cabling]',
+                    'name'=> 'keyFeature.inclusions.structured_cabling',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Suspended Ceiling',
-                    'name'=> 'inclusions[suspended_ceiling]',
+                    'name'=> 'keyFeature.inclusions.suspended_ceiling',
                     'value'=> false
                 ],
                 [
                     'label' => 'Gas Cook Top',
-                    'name' => 'inclusions[gas_cook_top]',
+                    'name' => 'keyFeature.inclusions.gas_cook_top',
                     'value' => false
                 ],
                 [
                     'label' => 'Oven',
-                    'name' => 'inclusions[oven]',
+                    'name' => 'keyFeature.inclusions.oven',
                     'value' => false
                 ],
                 [
                     'label'=> 'Microwave',
-                    'name'=> 'inclusions[microwave]',
+                    'name'=> 'keyFeature.inclusions.microwave',
                     'value'=> false
                 ],
                 [
                     'label' => 'Extractor Fan',
-                    'name' => 'inclusions[extractor_fan]',
+                    'name' => 'keyFeature.inclusions.extractor_fan',
                     'value' => false
                 ],
                 [
                     'label' => 'Dishwasher',
-                    'name' => 'inclusions[dishwasher]',
+                    'name' => 'keyFeature.inclusions.dishwasher',
                     'value' => false
                 ],
                 [
                     'label'=> 'Dryer',
-                    'name'=> 'inclusions[dryer]',
+                    'name'=> 'keyFeature.inclusions.dryer',
                     'value'=> false
                 ],
                 [
                     'label' => 'Carpet',
-                    'name' => 'inclusions[carpet]',
+                    'name' => 'keyFeature.inclusions.carpet',
                     'value' => false
                 ],
                 [
                     'label' => 'Television',
-                    'name' => 'inclusions[television]',
+                    'name' => 'keyFeature.inclusions.television',
                     'value' => false
                 ],
                 [
                     'label'=> 'Water Filtration',
-                    'name'=> 'inclusions[water_filtration]',
+                    'name'=> 'keyFeature.inclusions.water_filtration',
                     'value'=> false
                 ],
                 [
                     'label' => 'Satellite Dish',
-                    'name' => 'inclusions[satellite_dish]',
+                    'name' => 'keyFeature.inclusions.satellite_dish',
                     'value' => false
                 ],
                 [
                     'label' => 'Water Softener',
-                    'name' => 'inclusions[water_softener]',
+                    'name' => 'keyFeature.inclusions.water_softener',
                     'value' => false
                 ]
             ]
@@ -501,17 +503,17 @@ class AccordionKeyFeatures extends Component
             'fields' => [
                 [
                     'label'=> 'Unfurnished',
-                    'name'=> 'furnished[unfurnished]',
+                    'name'=> 'keyFeature.furnished.unfurnished',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Partly Furnished',
-                    'name'=> 'furnished[partly_furnished]',
+                    'name'=> 'keyFeature.furnished.partly_furnished',
                     'value'=> false
                 ],
                 [
                     'label'=> 'Furnished',
-                    'name'=> 'furnished[furnished]',
+                    'name'=> 'keyFeature.furnished.furnished',
                     'value'=> false
                 ]
             ]
@@ -521,8 +523,11 @@ class AccordionKeyFeatures extends Component
 
     public function toggle($id)
     {
-
-        $this->openItem = $this->openItem === $id ? null : $id;
+        try {
+            $this->openItem = $this->openItem === $id ? null : $id;
+        } catch (ValidationException $e) {
+            dd($e);
+        }
     }
 
     public function render()

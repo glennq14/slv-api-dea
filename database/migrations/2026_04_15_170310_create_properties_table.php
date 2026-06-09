@@ -47,6 +47,7 @@ return new class extends Migration
             $table->string('plot_description', 255)
                 ->comment('Description of the plot area')
                 ->nullable();
+            $table->integer('managing_agent_user_id');
             $table->string('year_of_construction', 5)
                 ->comment('Year of construction')
                 ->nullable();
@@ -75,13 +76,20 @@ return new class extends Migration
             $table->datetime('published_at')->index()
                 ->nullable();
             $table->unsignedBigInteger('agent_id')
+                ->nullable()
                 ->foreign('agent_id')
                 ->references('id')
                 ->on('agents');
             $table->unsignedBigInteger('developer_id')
+                ->nullable()
                 ->foreign('developer_id')
                 ->references('id')
                 ->on('developers');
+            $table->unsignedBigInteger('vendor_id')
+                ->nullable()
+                ->foreign('vendor_id')
+                ->references('id')
+                ->on('vendors');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

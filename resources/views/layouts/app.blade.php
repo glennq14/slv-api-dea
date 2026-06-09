@@ -133,5 +133,6 @@
 </footer>
 <script src="{{ asset('js/app.js') }}" defer></script>
 @stack('scripts')
+<?php /* @vite(['resources/js/google.map.js']) */ ?>
 </body>
 </html>

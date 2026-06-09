@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 
 #[Fillable([
-    'property_id', 'poa', 'basic_price', 'original_price', 'total_reduction_percentage',
-    'total_reduction_price', 'commission', 'communal_charges'
+    'property_id', 'is_poa', 'basic_price', 'original_price', 'total_reduction_percentage',
+    'total_reduction_price', 'commission', 'communal_charge'
 ])]
 
 #[Hidden(['property_id', 'created_at'])]

@@ -23,7 +23,13 @@ new class extends Component
     #[Validate('required|email')]
     public string $email;
 
-    /********* Bank *************/
+    #[Validate('nullable')]
+    public string $source;
+
+    #[Validate('nullable')]
+    public string $notes;
+
+    /********* Bank *************
     #[Validate('required|email')]
     public string $bank_name;
     
@@ -53,6 +59,7 @@ new class extends Component
 
      #[Validate('required|email')]
     public string $contact_email;
+    ******************************/
 
     /********* Lawyer ************/
     #[Validate('required|string')]
@@ -62,7 +69,7 @@ new class extends Component
     public string $lawyer_last_name;
     
     #[Validate('required|string')]
-    public string $lawyer_phone_number;
+    public string $lawyer_telephone_day;
 
     #[Validate('required|string')]
     public string $lawyer_email;
@@ -166,13 +173,13 @@ Basic location info
                     </div>
                     <div class="grid grid-cols-3 md:grid-cols-3 gap-5 mb-4">
                         <div>
-                            <label for="firstName" class="required-field block text-black text-sm mb-1">{{ __('Telephone') }}</label>
-                            <input type="text" wire:model.live="telephone_number" id="telephone" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                            @error('telephone_number') <span class="text-red">{{ $message }}</span> @enderror
+                            <label for="telephone" class="required-field block text-black text-sm mb-1">{{ __('Telephone') }}</label>
+                            <input type="text" wire:model.live="phone_number" id="telephone" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                            @error('phone_number') <span class="text-red">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label for="lastName" class="required-field block text-black text-sm mb-1">{{ __('Mobile') }}</label>
+                            <label for="mobile" class="required-field block text-black text-sm mb-1">{{ __('Mobile') }}</label>
                             <input type="text"  wire:model.live="mobile_number" id="mobile" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                             @error('mobile_number') <span class="text-red">{{ $message }}</span> @enderror
                         </div>
@@ -190,7 +197,7 @@ Basic location info
                         </div>
                         <div class="w-full">
                             <label for="" class="block text-black text-sm mb-1">{{ __('Source') }}</label>
-                            <select wire:model.live="source" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select wire:model="source" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="sample1">{{ __('Sample 1') }}</option>
                                 <option value="sample2">{{ __('Sample 2') }}</option>
                             </select>
@@ -217,6 +224,7 @@ Basic location info
             </div>
         </div>
     </div>
+    <?php /*
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
@@ -284,6 +292,7 @@ Basic location info
             </div>
         </div>
     </div>
+    */ ?>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
@@ -306,7 +315,7 @@ Basic location info
                             @error('lawyer_last_name') <span class="text-red">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label for="layerTelephoneDay" class="required-field block text-black text-sm mb-1">{{ __('Telephone / Mobile') }}</label>
+                            <label for="layerTelephoneDay" class="required-field block text-black text-sm mb-1">{{ __('Telephone Day') }}</label>
                             <input type="text" wire:model.live="lawyer_telephone_day" id="lawyerTelephoneDay" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                             @error('lawyer_phone_number') <span class="text-red">{{ $message }}</span> @enderror
                         </div>
@@ -347,7 +356,7 @@ Basic location info
                     </svg>
                 </div>
                 
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('status') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('success') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500"></p>
                 </div>

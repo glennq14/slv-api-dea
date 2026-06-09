@@ -147,7 +147,7 @@ Add your form or content for adding a property here
                     </svg>
                 </div>
                 
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('status') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('success') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500"></p>
                 </div>

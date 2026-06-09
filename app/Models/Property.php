@@ -23,7 +23,7 @@ use App\Traits\Blameable;
 #[Fillable([
     'property_type_id', 'reference', 'description', 'title_deeds',
     'leasehold', 'bedrooms','bathrooms', 'area_size', 'plot', 'plot_description', 
-    'agent_id', 'year_of_construction', 'pool', 'pool_description',
+    'managing_agent_user_id', 'year_of_construction', 'pool', 'pool_description',
     'listing_type', 'plan_zone', 'sea_view', 'for_sale_board',
     'status', 'save_type'
 ])]
@@ -40,7 +40,7 @@ class Property extends Model
 
     public function agent(): BelongsTo
     {
-        return $this->belongsTo(Agent::class);
+        return $this->belongsTo(User::class, 'managing_agent_user_id');
     }
 
     public function propertyType(): BelongsTo

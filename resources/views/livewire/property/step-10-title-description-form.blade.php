@@ -20,7 +20,7 @@ new class extends Component
     {
         $this->property = $property;
         $this->isEdit = $isEdit;
-        $this->description = $property->description;
+        $this->description = $property->description ?? '';
     }
 
     /****************************************
@@ -53,6 +53,7 @@ new class extends Component
     #[On('parentUpdateButtonTriggered')]
     public function handleUpdateProperty()
     {
+        
         $validatedData = $this->validate();
 
         if ($this->property && $this->property->exists) {
@@ -78,11 +79,13 @@ Basic location info
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Title and Description')  }}
+                        {{ __('Property Description')  }}
                     </h3>
                     <div class="w-full">
+                        @error('description')
+                        <div class="bg-red-100 p-3 rounded-5"><span class="text-red-500 text-shadow-sm">{{ $message }}</span></div>
+                        @enderror
                     </div>
-                    @error('description') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                     <div class="w-full py-5">
                         <label for="description" class="required-field">{{ __('Property Description')  }} <span class="text-gray-500">{{ __('2000 characters recommended') }}</span></label>
                         

@@ -8,9 +8,18 @@ use Illuminate\Support\Facades\Log;
 
 new class extends Component
 {
+    
+
     public ?Property $property;
 
     public bool $isEdit = false;
+
+    protected function rules()
+    {
+        return [
+            'keyFeature.*.fields.*.value' => 'boolean',
+        ];
+    }
 
     public function mount(Property $property, $isEdit = false): void
     {
@@ -42,13 +51,12 @@ new class extends Component
     {   
         try {
             $validatedData = $this->validate();
-
+            dd($validatedData);
             $this->property->keyFeature()->updateOrCreate([
                     'property_id' => $this->property->id,
                 ],
                 $validatedData
             );
-
             session()->flash('success', 'Property updated successfully');
          } catch (ValidationException $e) {
             Log::info('Property validation error. Please double check.');
@@ -101,7 +109,7 @@ Add your form or content for adding a property here
                     </svg>
                 </div>
                 
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('status') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('success') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500"></p>
                 </div>

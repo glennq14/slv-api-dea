@@ -8,11 +8,14 @@ npm install
 
 ----- DB SETUP ----------------------
 
+php artisan key:generate --show
+
 php artisan migrate
 php artisan db:seed
 php artisan db:seed --class=AgentSeeder 
 php artisan db:seed --class=PropertyTypesSeeder
-php artisan key:generate --show
+php artisan db:seed --class=RoleSeeder
+
 php artisan optimize
 
 -------- RUN DEV SERVE -------------

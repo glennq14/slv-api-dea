@@ -25,9 +25,9 @@ new class extends Component
     {
         $this->property          = $property;
         $this->isEdit            = $isEdit;
-        $this->embed_url_1       = ($property->video->embed_url_1) ? $property->video->embed_url_1 : '';
-        $this->embed_url_2       = ($property->video->embed_url_2) ? $property->video->embed_url_2 : '';
-        $this->virtual_tour_link = ($property->video->virtual_tour_link) ? $property->video->virtual_tour_link : '';
+        $this->embed_url_1       = ($property->video->embed_url_1) ?? '';
+        $this->embed_url_2       = ($property->video->embed_url_2) ?? '';
+        $this->virtual_tour_link = ($property->video->virtual_tour_link) ?? '';
     }
 
     #[On('parentNextStepButtonTriggered')]

@@ -28,7 +28,7 @@ class MultiStepForm extends Component
 
     public function updatedStep(int $value)
     {   
-
+        
         $this->updatedStep = $value;
         
         if ($value == 2) {
@@ -36,7 +36,7 @@ class MultiStepForm extends Component
         }
 
         if ($value == 10) {
-            $this->dispatch('load-tinymce');
+           // $this->dispatch('load-tinymce');
         }
     }
 

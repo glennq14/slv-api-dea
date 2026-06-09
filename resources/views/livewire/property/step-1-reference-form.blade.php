@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\Property;
 use Illuminate\Validation\Rule;
-use App\Models\Agent;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
@@ -41,8 +41,8 @@ new class extends Component
     #[Validate('required|string')]
     public string $plot_description;
 
-    #[Validate('required|string')]
-    public string $agent_id;
+    #[Validate('required|numeric')]
+    public string $managing_agent_user_id;
 
     // #[Validate('required|integer|digits:4|min:1900|max:3050')]
     public int $year_of_construction;
@@ -83,6 +83,9 @@ new class extends Component
     #[Validate('nullable')]
     public string $leasehold = 'yes';
 
+    #[Validate('nullable')]
+    public int $developer_id = 0;
+
     public $isEdit = false;
 
     // check parent next button is click/triggered
@@ -92,7 +95,7 @@ new class extends Component
     public $propertyTypes = [];
 
     // list of agents
-    public $agents = [];
+    public $users = [];
 
     //for property edit
     public ?Property $property = null;
@@ -122,7 +125,7 @@ new class extends Component
         return [
             'edit_reference' => 'reference',
             'property_type_id' => 'property Type',
-            'agent_id' => 'agent'
+            'managing_agent_user_id' => 'managing agent'
         ];
     }
 
@@ -140,7 +143,7 @@ new class extends Component
             $this->bathrooms            = $property->bathrooms;
             $this->plot                 = $property->plot;
             $this->plot_description     = $property->plot_description;
-            $this->agent_id             = $property->agent_id;
+            $this->managing_agent_user_id = $property->managing_agent_user_id;
             $this->year_of_construction = $property->year_of_construction;
             $this->pool_description     = $property->pool_description;
             $this->property_type_id     = $property->property_type_id;
@@ -157,7 +160,7 @@ new class extends Component
         }
         
         $this->propertyTypes = $propertyTypes->orderBy('name', 'asc')->get();
-        $this->agents = Agent::all();
+        $this->users = User::all();
     }
 
     //Create
@@ -179,12 +182,16 @@ new class extends Component
             $validatedData['reference'] = strtoupper($validatedData['reference']);
 
             $newProperty = Property::create($validatedData);
-            $newProperty->price()->updateOrCreate($price);
+            $newProperty->price()->updateOrCreate([
+                    'property_id' => $this->property->id,
+                ],
+                $price);
             
             $this->dispatch( 'proceed-to-next-step', property_id: $newProperty->id);
                 
         } catch (ValidationException $e) {
             Log::info('Property validation error. Please double check.');
+            dd($e);
             throw $e;
         }
     }
@@ -205,7 +212,10 @@ new class extends Component
             ];
 
             $this->property->update($validatedData);
-            $this->property->price()->updateOrCreate($price);
+            $this->property->price()->updateOrCreate([
+                    'property_id' => $this->property->id,
+                ],
+                $price);
 
             session()->flash('success', 'Property has been successfully updated!');
         }
@@ -396,13 +406,13 @@ Basic information about the property
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
                         <div>
                             <label for="agent" class="required-field block text-black text-sm mb-1 mb-1">{{ __('Managing Agent') }}</label>
-                            <select wire:model.live="agent_id" id="agent" class="w-full border-gray-300 py-3 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm" required />
-                                <option value="">None</option>
-                                @foreach( $agents as  $id => $agent )
-                                <option value="{{ $agent->id }}"  wire:key="{{ $agent->id }}">{{ $agent->first_name . ' ' . $agent->last_name }}</option>
+                            <select wire:model.live="managing_agent_user_id" id="agent" class="w-full border-gray-300 py-3 rounded-md text-sm shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm" required />
+                                <option value="12">SLV (General)</option>
+                                @foreach( $users as  $id => $user )
+                                <option value="{{ $user->id }}"  wire:key="{{ $user->id }}">{{ $user->first_name . ' ' . $user->last_name }}</option>
                                 @endforeach
                             </select>
-                            @error('agent_id') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
+                            @error('managing_agent_user_id') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="year_of_construction" class="required-field block text-black text-sm mb-1">{{ __('Year of Construction') }}</label>
@@ -541,7 +551,7 @@ Basic information about the property
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
-            x-init="setTimeout(() => show = false, 3000)"
+            x-init="setTimeout(() => show = false, 2500)"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95"
             x-transition:enter-end="opacity-100 scale-100"
@@ -570,7 +580,7 @@ Basic information about the property
     @if (session()->has('success'))
         <div x-data="{ show: true }"
             x-show="show"
-            x-init="setTimeout(() => show = false, 3000)"
+            x-init="setTimeout(() => show = false, 2500)"
             x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95"
             x-transition:enter-end="opacity-100 scale-100"
