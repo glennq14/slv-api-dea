@@ -30,6 +30,8 @@ return new class extends Migration
                 ->comment('File patch');
             $table->string('url')
                 ->comment('The URL to retrieve this piece of media from');
+            $table->string('orig_filename')
+                ->comment('File original file name');
             $table->string('caption')
                 ->comment('The caption to be displayed for this piece of media')
                 ->nullable();

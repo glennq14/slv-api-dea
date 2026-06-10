@@ -26,7 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/properties-xml/feed', [PropertiesXmlController::class, 'feed'])->name('property.xml-feed');
 
     //upload to S3 Bucket process route
-    Route::post('/s3/file-upload/', [S3FileUploadController::class, 'generate']);
+    Route::post('/s3/file-upload', [S3FileUploadController::class, 'upload']);
 });
 
 // Route::view('dashboard', 'dashboard')

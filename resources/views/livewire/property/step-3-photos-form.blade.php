@@ -13,10 +13,6 @@ new class extends Component
 {
     use WithFileUploads;
 
-    public string $photo;
-
-    // public ?UploadedFile $image = null;
-
     public bool $isEdit = false;
 
     public ?Property $property;
@@ -25,11 +21,14 @@ new class extends Component
 
     public $gallery = [];
 
+    public $propertyReference = [];
+
     public function mount(Property $property, $isEdit = false): void
     {
         $this->property = $property;
         $this->isEdit   = $isEdit;
         $this->propertyId = $property->id;
+        $this->propertyReference = $property->reference;
     }
 
     // for creating action
@@ -37,12 +36,16 @@ new class extends Component
     public function hundleNextStepButtonTriggered()
     {
         try {
-            $validatedData = $this->validate();
-            $this->property->photos()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $validatedData
-            );
+
+           // Gallery
+            foreach ($this->gallery as $item) {
+                // dd($item); 
+                PropertyMedia::create([
+                    'property_id' => $this->propertyId,
+                    'type' => 'gallery',
+                    ...$item
+                ]);
+            }
 
             $this->dispatch( 'proceed-to-next-step', property_id: $this->property->id);
          } catch (ValidationException $e) {
@@ -50,192 +53,14 @@ new class extends Component
             throw $e;
         }
     }
-
-    // for edit action
-    #[On('parentUpdateButtonTriggered')]
-    public function handleUpdateProperty()
-    {   
-        try {
-            $validatedData = $this->validate();
-
-            $this->property->photos()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $validatedData
-            );
-
-            session()->flash('success', 'Property updated successfully');
-         } catch (ValidationException $e) {
-            Log::info('Property validation error. Please double check.');
-            throw $e;
-        }
-        
-    }
-    
 }
 
 ?>
-
-<div x-data="uploadMultiple('gallery')">
-    <label>Photos</label>
-
-    <input type="file" multiple @change="upload($event)">
-
-    <div class="flex gap-2 mt-2">
-        <template x-for="file in files">
-            <img :src="file.url" width="100">
-        </template>
-    </div>
-</div>
-@script
-<script>
-function uploadSingle(folder) {
-    return {
-        fileUrl: null,
-
-        async upload(event) {
-            const file = event.target.files[0];
-
-            const res = await fetch('/s3/file-upload/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    filename: file.name,
-                    type: file.type,
-                    folder: folder
-                })
-            });
-
-            const data = await res.json();
-
-            await fetch(data.url, {
-                method: 'PUT',
-                headers: { 'Content-Type': file.type },
-                body: file
-    use WithFileUploads;
-
-    public string $photo;
-
-    // public ?UploadedFile $image = null;
-
-    public bool $isEdit = false;
-
-    public ?Property $property;
-
-    public int $propertyId;
-
-    public $gallery = [];
-
-    public function mount(Property $property, $isEdit = false): void
-    {
-        $this->property = $property;
-        $this->isEdit   = $isEdit;
-        $this->propertyId = $property->id;
-    }
-
-    // for creating action
-    #[On('parentNextStepButtonTriggered')]
-    public function hundleNextStepButtonTriggered()
-    {
-        try {
-            $validatedData = $this->validate();
-            $this->property->photos()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $validatedData
-            );
-
-            $this->dispatch( 'proceed-to-next-step', property_id: $this->property->id);
-         } catch (ValidationException $e) {
-            Log::info('Property validation error. Please double check.');
-            throw $e;
-        }
-    }
-
-    // for edit action
-    #[On('parentUpdateButtonTriggered')]
-    public function handleUpdateProperty()
-    {   
-        try {
-            $validatedData = $this->validate();
-
-            $this->property->photos()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $validatedData
-            );
-
-            session()->flash('success', 'Property updated successfully');
-         } catch (ValidationException $e) {
-            Log::info('Property validation error. Please double check.');
-            throw $e;
-        }
-        
-    }
-            });
-
-            this.fileUrl = data.file_url;
-
-            // @this.set(folder, {
-            //     path: data.path,
-            //     url: data.file_url
-            // });
-        }
-    }
-}
-
-
-function uploadMultiple(folder) {
-    return {
-        files: [],
-
-        async upload(event) {
-            for (let file of event.target.files) {
-
-                const res = await fetch('/s3/file-upload/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        filename: file.name,
-                        type: file.type,
-                        folder: folder
-                    })
-                });
-
-                const data = await res.json();
-
-                await fetch(data.url, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': file.type },
-                    body: file
-                });
-
-                this.files.push({
-                    path: data.path,
-                    url: data.file_url
-                });
-
-                window.Livewire.find('{{ $propertyId }}').push(folder, {
-                    path: data.path,
-                    url: data.file_url
-                });
-            }
-        }
-    }
-}
-</script>
-@endscript
     <!-----------------------------------------
     Basic location info
     ----------------------------------------->
-   
-   <?php /* <div class="py-3">
+<div>
+    <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
@@ -243,25 +68,30 @@ function uploadMultiple(folder) {
                         {{ __('Photos')  }}
                     </h3>
                     <p class="mb-5 text-sm text-gray-600">{{ __('Upload photos of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
-                    <div class="border rounded">
+                    <div wire:ignore x-data="uploadMultiple('{{ $propertyReference }}')" class="border rounded">
+
+                        <input id="dropzone-file" multiple type="file" @change="upload($event)" class="hidden"/>
+
                         <div class="flex items-center justify-center w-full">
-                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 bg-neutral-secondary-medium border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium">
-                                <div class="flex flex-col items-center justify-center text-body pt-2 pb-2">
+                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border border-dashed rounded cursor-pointer">
+                            <div class="flex flex-col items-center justify-center text-body pt-2 pb-2">
                                     <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
                                     <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                     <p class="text-xs text-center">Accepted formats: JPG & WEBP <br >(Max 30MB per file)</p>
                                 </div>
-                                <input wire:model="photos" id="dropzone-file" type="file" class="hidden"/>
                             </label>
-                        </div> 
-                    </div>
-                </div>  
+                        </div>
+
+                        <div class="flex gap-2 mt-2">
+                            <template x-for="file in files" :key="file.path">
+                                <img :src="file.url" width="100">
+                            </template>
+                        </div>
+                    </div> 
+                </div>
             </div>
         </div>
     </div>
-    @if ($photos)
-        <img src="{{ $photos->temporaryUrl() }}" width="100">
-    @endif
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
@@ -320,5 +150,66 @@ function uploadMultiple(folder) {
             </div>
         </div>
     @endif
-    </div>
-*/?>
+</div>
+
+@script
+<script>
+    const imageType = 'gallery';
+    window.uploadMultiple = function (folder) {
+        return {
+            files: [],
+            async upload(event) {
+                for (let file of event.target.files) {
+                    let formData = new FormData();
+
+                    formData.append('file', file);
+                    formData.append('folder', folder);
+                    
+                    const xhr = new XMLHttpRequest();
+
+                    xhr.open('POST', '/s3/file-upload', true);
+                    xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+
+                    xhr.onload = () => {
+                        const res = JSON.parse(xhr.responseText);
+                        
+                        // this.file.push(res);
+
+                        // @this.push('photos', res);
+
+                        this.files.push({
+                            orig_filename: res.org_filename,
+                            path: res.path,
+                            url: res.url
+                        });
+                    
+
+                        @this.set(imageType, {
+                            orig_filename: res.org_filename,
+                            path: res.path,
+                            url: res.url
+                        });
+                    }
+
+                    await xhr.send(formData)
+
+                    // console.log(data);
+                
+                    // this.files.push({
+                    //     orig_filename: data.org_filename,
+                    //     path: data.path,
+                    //     url: data.url
+                    // });
+
+                    // @this.set(imageType, {
+                    //     orig_filename: data.org_filename,
+                    //     path: data.path,
+                    //     url: data.url
+                    // });
+                    
+                }
+            }
+        }
+    }
+</script>
+@endscript

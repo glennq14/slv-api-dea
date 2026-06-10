@@ -128,86 +128,87 @@
             selector: '#description'
         });
     });
+<?php /*
+    // function uploadSingle(folder) {
+    //     return {
+    //         fileUrl: null,
 
-    function uploadSingle(folder) {
-        return {
-            fileUrl: null,
+    //         async upload(event) {
+    //             const file = event.target.files[0];
 
-            async upload(event) {
-                const file = event.target.files[0];
+    //             const res = await fetch('/s3/file-upload/', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     filename: file.name,
+    //                     type: file.type,
+    //                     folder: folder
+    //                 })
+    //             });
 
-                const res = await fetch('/s3/file-upload/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        filename: file.name,
-                        type: file.type,
-                        folder: folder
-                    })
-                });
+    //             const data = await res.json();
 
-                const data = await res.json();
+    //             await fetch(data.url, {
+    //                 method: 'PUT',
+    //                 headers: { 'Content-Type': file.type },
+    //                 body: file
+    //             });
 
-                await fetch(data.url, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': file.type },
-                    body: file
-                });
+    //             this.fileUrl = data.file_url;
 
-                this.fileUrl = data.file_url;
+    //             @this.set(folder, {
+    //                 path: data.path,
+    //                 url: data.file_url
+    //             });
+    //         }
+    //     };
+    // }
 
-                @this.set(folder, {
-                    path: data.path,
-                    url: data.file_url
-                });
-            }
-        };
-    }
+    // function uploadMultiple(folder) {
+    //     return {
+    //         files: [],
 
-    function uploadMultiple(folder) {
-        return {
-            files: [],
+    //         async upload(event) {
+    //             for (let file of event.target.files) {
+    //                 console.log('upload');
+    //                 const res = await fetch('/s3/file-upload/', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //                     },
+    //                     body: JSON.stringify({
+    //                         filename: file.name,
+    //                         type: file.type,
+    //                         folder: folder
+    //                     })
+    //                 });
 
-            async upload(event) {
-                for (let file of event.target.files) {
+    //                 const data = await res.json();
 
-                    const res = await fetch('/s3/file-upload/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            filename: file.name,
-                            type: file.type,
-                            folder: folder
-                        })
-                    });
+    //                 await fetch(data.url, {
+    //                     method: 'PUT',
+    //                     headers: { 'Content-Type': file.type },
+    //                     body: file
+    //                 });
 
-                    const data = await res.json();
+    //                 this.files.push({
+    //                     path: data.path,
+    //                     url: data.file_url
+    //                 });
 
-                    await fetch(data.url, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': file.type },
-                        body: file
-                    });
-
-                    this.files.push({
-                        path: data.path,
-                        url: data.file_url
-                    });
-
-                    window.Livewire.find('{{ $property->id }}').push(folder, {
-                        path: data.path,
-                        url: data.file_url
-                    });
-                }
-            }
-        }
-    }
+    //                 window.Livewire.find('{{ $property->id }}').push(folder, {
+    //                     path: data.path,
+    //                     url: data.file_url
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }
+*/ ?>
     </script>
 @endscript
 @push('scripts')

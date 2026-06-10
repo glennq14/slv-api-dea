@@ -95,7 +95,7 @@ new class extends Component
     public string $map_address;
 
     #[Validate('required|numeric')]
-    public int $accuracy = 1000;
+    public int $accuracy = 500;
 
     public bool $isEdit = false;
 
@@ -269,8 +269,8 @@ Property Location input form
                         <div>
                             <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
                             <select wire:model="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="500" >500</option>
                                 <option value="1000" default>1000</option>
-                                <option value="5000" >5000</option>
                             </select>
                         </div>
                     </div>

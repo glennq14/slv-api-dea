@@ -195,7 +195,6 @@ new class extends Component
             $this->dispatch( 'proceed-to-next-step', property_id: $newProperty->id);
                 
         } catch (ValidationException $e) {
-            dd($e);
             Log::info('Property validation error. Please double check.');
             throw $e;
         }

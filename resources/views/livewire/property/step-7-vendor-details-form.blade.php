@@ -24,7 +24,7 @@ new class extends Component
     public string $email;
 
     #[Validate('nullable')]
-    public string $source;
+    public string $source = 'sample';
 
     #[Validate('nullable')]
     public string $notes;
@@ -195,13 +195,13 @@ Basic location info
                             <label class="mr-3"><input type="radio" name="category_type" value="vendor" checked/>&nbsp;&nbsp;{{ __('Vendor') }}</label>
                             <label class=""><input type="radio" name="category_type" value="landlord"/>&nbsp;&nbsp;{{ __('Landlord') }}</label>
                         </div>
-                        <div class="w-full">
+                        <!-- <div class="w-full">
                             <label for="" class="block text-black text-sm mb-1">{{ __('Source') }}</label>
                             <select wire:model="source" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="sample1">{{ __('Sample 1') }}</option>
                                 <option value="sample2">{{ __('Sample 2') }}</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="py-5">
                         <label class="text-sm">{{ __('Notes') }}</label>
@@ -224,7 +224,7 @@ Basic location info
             </div>
         </div>
     </div>
-    <?php /*
+
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
