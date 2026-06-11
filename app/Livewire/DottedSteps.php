@@ -21,7 +21,7 @@ class DottedSteps extends Component
         'Vendor',
         'Key Features',
         'V-tour Video',
-        'Title & Description'
+        'Description'
     ];
 
     public function mount($step = 0, bool $isEdit = false)

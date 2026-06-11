@@ -6,6 +6,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
+use App\Models\PropertyPhotos;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 
@@ -18,10 +19,20 @@ new class extends Component
     public ?Property $property;
 
     public int $propertyId;
+    #[Validate([
+        'photos' => 'required|array|max:5', // Max 5 total files
+        'photos.*' => 'image|max:1024|mimes:jpeg,png', // Individual rules per image
+    ])]
+    public $photos = [];
 
-    public $gallery = [];
+    public $tempPhotos = [];
 
     public $propertyReference = [];
+
+    // 2mb
+    // jpeg webp
+
+    // .doc .pdf .docx .xlsx .csv
 
     public function mount(Property $property, $isEdit = false): void
     {
@@ -29,6 +40,22 @@ new class extends Component
         $this->isEdit   = $isEdit;
         $this->propertyId = $property->id;
         $this->propertyReference = $property->reference;
+
+        // load tempt Images which is not yet stored in database
+        $this->getS3TempPhotos();
+    }
+
+    /**
+     * Populate all temporary images that was not yet stored in database
+     * Temporary file images store in AWS s3 bucket
+     */
+    public function getS3TempPhotos()
+    {
+        if ( $this->property->reference !== '' ) {
+
+            $this->tempPhotos = Storage::disk('s3')->files($this->property->reference);
+
+        }
     }
 
     // for creating action
@@ -38,9 +65,9 @@ new class extends Component
         try {
 
            // Gallery
-            foreach ($this->gallery as $item) {
-                // dd($item); 
-                PropertyMedia::create([
+            foreach ($this->photos as $item) {
+                dd($item); 
+                PropertyPhotos::create([
                     'property_id' => $this->propertyId,
                     'type' => 'gallery',
                     ...$item
@@ -53,6 +80,46 @@ new class extends Component
             throw $e;
         }
     }
+
+    // for edit action
+    #[On('parentUpdateButtonTriggered')]
+    public function handleUpdateProperty()
+    {   
+         try {
+
+           // Gallery
+            foreach ($this->photos as $item) {
+                dd($item); 
+                PropertyPhotos::create([
+                    'property_id' => $this->propertyId,
+                    'type' => 'gallery',
+                    ...$item
+                ]);
+            }
+
+            session()->flash('success', 'Property updated successfully');
+         } catch (ValidationException $e) {
+            Log::info('Property validation error. Please double check.');
+            throw $e;
+        }
+
+        // dd($this->galleries);
+        // try {
+        //     $validatedData = $this->validate();
+
+        //     $this->property->address()->updateOrCreate([
+        //             'property_id' => $this->property->id,
+        //         ],
+        //         $validatedData
+        //     );
+
+        //     session()->flash('success', 'Property updated successfully');
+        //  } catch (ValidationException $e) {
+        //     Log::info('Property validation error. Please double check.');
+        //     throw $e;
+        // }
+        
+    }
 }
 
 ?>
@@ -60,34 +127,56 @@ new class extends Component
     Basic location info
     ----------------------------------------->
 <div>
+    <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
+    </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
-                    <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Photos')  }}
-                    </h3>
-                    <p class="mb-5 text-sm text-gray-600">{{ __('Upload photos of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
-                    <div wire:ignore x-data="uploadMultiple('{{ $propertyReference }}')" class="border rounded">
+                    <form wire:submit.prevent="save">
+                        <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
+                            {{ __('Photos')  }}
+                        </h3>
+                        <p class="mb-5 text-sm text-gray-600">{{ __('Upload photos of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
+                        <div wire:ignore x-data="uploadMultiple('{{ $propertyReference }}')" class="border rounded">
 
-                        <input id="dropzone-file" multiple type="file" @change="upload($event)" class="hidden"/>
+                            <input id="dropzone-file" multiple type="file" @change="upload($event)" class="hidden"/>
 
-                        <div class="flex items-center justify-center w-full">
-                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border border-dashed rounded cursor-pointer">
-                            <div class="flex flex-col items-center justify-center text-body pt-2 pb-2">
-                                    <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
-                                    <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p class="text-xs text-center">Accepted formats: JPG & WEBP <br >(Max 30MB per file)</p>
-                                </div>
-                            </label>
-                        </div>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border border-dashed rounded cursor-pointer">
+                                <div class="flex flex-col items-center justify-center text-body pt-2 pb-2">
+                                        <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
+                                        <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-center">Accepted formats: JPG & WEBP <br >(Max 2MB per file)</p>
+                                    </div>
+                                </label>
+                            </div>
 
-                        <div class="flex gap-2 mt-2">
-                            <template x-for="file in files" :key="file.path">
-                                <img :src="file.url" width="100">
-                            </template>
-                        </div>
-                    </div> 
+                            <div class="flex gap-2 mt-2 p-3">
+                                <template x-for="file in files" :key="file.path" x-data="{ isLoaded: false }">
+                                    <div class="w-32 relative">
+                                        <!-- PROGRESS BAR -->
+                                        <div role="progress" class="uploadStatus absolute inset-0 m-auto z-10" x-show="!isLoaded">
+                                            <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>    
+
+                                        <!-- IMAGE -->
+                                        <img 
+                                            :src="file.url"
+                                            x-show="isLoaded"
+                                            @load="isLoaded = true"
+                                            width="300"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </div> 
+                    </form>
                 </div>
             </div>
         </div>
@@ -154,11 +243,23 @@ new class extends Component
 
 @script
 <script>
-    const imageType = 'gallery';
+    const imageType = 'photos';
+
+    window.isUploading = function() {
+        return this.files.some(file => file.progress < 100);
+    }
+
     window.uploadMultiple = function (folder) {
         return {
             files: [],
             async upload(event) {
+                showLoading = true;
+                
+                let fileProgress = {
+                    id: Date.now() + Math.random(),
+                    progress: 0
+                };
+
                 for (let file of event.target.files) {
                     let formData = new FormData();
 
@@ -169,46 +270,34 @@ new class extends Component
 
                     xhr.open('POST', '/s3/file-upload', true);
                     xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                    
+                    xhr.upload.onprogress = (e) => {
+                        if (e.lengthComputable) {
+                            fileProgress.progress = Math.round((e.loaded / e.total) * 100);
+                        }
+                    };
 
                     xhr.onload = () => {
-                        const res = JSON.parse(xhr.responseText);
+                        if (xhr.status === 200) {
+                            const res = JSON.parse(xhr.responseText); 
+
+                            this.files.push({
+                                orig_filename: res.org_filename,
+                                path: res.path,
+                                url: res.url,
+                                progress: fileProgress
+                            });
                         
-                        // this.file.push(res);
-
-                        // @this.push('photos', res);
-
-                        this.files.push({
-                            orig_filename: res.org_filename,
-                            path: res.path,
-                            url: res.url
-                        });
-                    
-
-                        @this.set(imageType, {
-                            orig_filename: res.org_filename,
-                            path: res.path,
-                            url: res.url
-                        });
+                            @this.set(imageType, {
+                                orig_filename: res.org_filename,
+                                path: res.path,
+                                url: res.url
+                            });
+                        }
                     }
-
                     await xhr.send(formData)
-
-                    // console.log(data);
-                
-                    // this.files.push({
-                    //     orig_filename: data.org_filename,
-                    //     path: data.path,
-                    //     url: data.url
-                    // });
-
-                    // @this.set(imageType, {
-                    //     orig_filename: data.org_filename,
-                    //     path: data.path,
-                    //     url: data.url
-                    // });
-                    
                 }
-            }
+             }
         }
     }
 </script>

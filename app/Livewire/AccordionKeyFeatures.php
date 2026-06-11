@@ -521,7 +521,7 @@ class AccordionKeyFeatures extends Component
 
     ];
 
-    public function toggle($id)
+    public function toggle(int $id)
     {
         try {
             $this->openItem = $this->openItem === $id ? null : $id;

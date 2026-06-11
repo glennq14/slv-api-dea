@@ -11,7 +11,7 @@ class PropertiesXmlController extends Controller
     public function feed()
     {
 
-        $data = Property::with('author')
+        $data = Property::with('created_by')
                             ->with('property_type')
                             ->with('address')
                             ->get();

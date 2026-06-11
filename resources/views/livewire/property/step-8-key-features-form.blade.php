@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 new class extends Component
 {
     
-
     public ?Property $property;
 
     public bool $isEdit = false;
@@ -51,7 +50,7 @@ new class extends Component
     {   
         try {
             $validatedData = $this->validate();
-            dd($validatedData);
+
             $this->property->keyFeature()->updateOrCreate([
                     'property_id' => $this->property->id,
                 ],
@@ -74,6 +73,9 @@ Add your form or content for adding a property here
     <!-----------------------------------------
     Basic location info
     ----------------------------------------->
+    <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
+    </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">

@@ -97,6 +97,8 @@ new class extends Component
     #[Validate('required|numeric')]
     public int $accuracy = 500;
 
+    public array $galleries = [];
+
     public bool $isEdit = false;
 
     public ?Property $property = null;
@@ -184,8 +186,9 @@ Property Location input form
         </div>
     @endif
     */ ?>
-    <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
-        <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+    <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <span class="required-field"></span> &nbsp;&nbsp;<span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
     </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -216,12 +219,12 @@ Property Location input form
                                     </option>
                                 @endforeach
                             </select>
-                            @error('town') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
+                            @error('town_city') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Locality') }}</label>
                             <select wire:model.live="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="all locality" selected class="text-gray-500">All Locality</option>
+                                <option value="All Locality" selected class="text-gray-500">All Locality</option>
                             </select>
                         </div>
                     </div>
@@ -248,7 +251,7 @@ Property Location input form
                         <div>
                             <label for="latitude" class="required-field font-md block text-black text-sm mb-1">{{ __('Latitude') }}</label>
                             <input type="number"
-                                wire:model.ive="latitude" 
+                                wire:model.live="latitude" 
                                 id="latitude" 
                                 class="w-full border-gray-300 rounded-md text-sm  shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             />
@@ -267,10 +270,10 @@ Property Location input form
                             @error('longitude') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label for="locality" class="font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
-                            <select wire:model="locality" id="locality" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                <option value="500" >500</option>
-                                <option value="1000" default>1000</option>
+                            <label for="accuracy" class="font-md block text-black text-sm mb-1">{{ __('Accuracy') }}</label>
+                            <select wire:model.live="accuracy" id="accuracy" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
                             </select>
                         </div>
                     </div>
