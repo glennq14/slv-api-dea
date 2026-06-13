@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class S3FileUploadController extends Controller
 {
@@ -23,11 +24,12 @@ class S3FileUploadController extends Controller
 
         // Get permanent URL
         $url = Storage::disk('s3')->url($path);
-        Log::info();
+        Log::info($url);
         return response()->json([
             'path' => $path,
             'url' => $url,
             'orig_filename' => $origFilename,
+            'ext' => $extension
         ]);
 
     }
