@@ -3,7 +3,7 @@
 /**
  * This command migrates property data from the Ultra XML feed to the new database structure.
  * It fetches the XML data, parses it, and then inserts the relevant information into the properties,
- * addresses, amenities, prices, photos, and networks tables.
+ * addresses, amenities, prices, gallery, and networks tables.
  *
  * The command also logs the progress and any errors en1ered during the migration process.
  *
@@ -97,7 +97,7 @@ class MigrateUltraXmlFeedCommand extends Command
 
         /**
          * Iterate through each property in the XML feed, map the data to the corresponding database fields,
-         * and insert the data into the properties, addresses, amenities, prices, photos, and networks tables.
+         * and insert the data into the properties, addresses, amenities, prices, gallery, and networks tables.
          */
         foreach ($xmlData->property as $property) {
 
@@ -160,11 +160,11 @@ class MigrateUltraXmlFeedCommand extends Command
                 'basic_price' => (current($property->price) != null) ? (float) current($property->price) : 0,
             ];
 
-            $photosData = [];
+            $gallryData = [];
             if (! empty($property->images)) {
                 $sort = 0;
                 foreach ($property->images->image as $image) {
-                    $photosData[] = [
+                    $galleryData[] = [
                         'url' => (string) $image->url,
                         'type' => 'gallery',
                         'caption' => null,
@@ -189,7 +189,7 @@ class MigrateUltraXmlFeedCommand extends Command
             $property->address()->create($propertiesAddressData);
             $property->amenities()->create($propertiesAmenitiesData);
             $property->price()->create($propertiesPricesData);
-            $property->photos()->createMany($photosData);
+            $property->gallery()->createMany($gallryData);
             $property->networks()->createMany($network);
 
             $ctr++;
