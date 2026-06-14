@@ -58,14 +58,14 @@ class Property extends Model
         return $this->hasOne(PropertyContactDetail::class);
     }
 
-    public function gallery(): HasMany
+    public function photo(): HasMany
     {
-        return $this->hasMany(PropertyGallery::class); //set for gallery images
+        return $this->hasMany(PropertyFile::class)->where('type', 'gallery'); //set for gallery images
     }
     
     public function floorPlan(): HasMany
     {
-        return $this->hasMany(PropertyFloorPlan::class); // Set for floor plan category
+        return $this->hasMany(PropertyFile::class)->where('type', 'floorplan'); // Set for floor plan category
     }
 
     public function keyFeature(): HasMany

@@ -4,7 +4,7 @@ use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-use App\Models\PropertyFloorPlan;
+use App\Models\PropertyFile;
 use App\Models\Property;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +30,7 @@ new class extends Component
      * For delete action
      */
     public $showModal = false;
-    public ?PropertyFloorPlan $selectDeletePhoto;
+    public ?PropertyFile $selectDeleteFloorPlan;
 
     // .doc .pdf .docx .xlsx .csv
     public function mount(Property $property, $isEdit = false): void
@@ -61,7 +61,7 @@ new class extends Component
      */
     public function refreshFloorPlanList(): void
     {
-        $this->photos = PropertyFloorPlan::where('property_id', $this->propertyId)
+        $this->photos = PropertyFile::where('property_id', $this->propertyId)
                         ->where('type', 'floorplan')
                         ->orderBy('sort_order')
                         ->get();
@@ -79,7 +79,7 @@ new class extends Component
             list($filename, $ext) = explode('.',$file['orig_filename']);
 
             //check if the photo already exist on respective propety
-            $isPhotoExist = PropertyFloorPlan::whereRaw('orig_filename REGEXP ?', [
+            $isPhotoExist = PropertyFile::whereRaw('orig_filename REGEXP ?', [
                                     '^' . $filename . '(\\([0-9]+\\))?\\.[a-zA-Z0-9]+$'
                                 ])
                                 ->where([
@@ -97,7 +97,7 @@ new class extends Component
 
             // get the total number of properties and plus 1 for the sorting of the images
             // $total count + 1 = sort number of the new photo
-            $lastSortNumber = PropertyFloorPlan::where([
+            $lastSortNumber = PropertyFile::where([
                     'type' => 'floorplan',
                     'property_id' => $this->propertyId
                 ])->count();
@@ -105,7 +105,7 @@ new class extends Component
             ++$lastSortNumber;
 
             // Store the new photo
-            PropertyFloorPlan::updateOrCreate([
+            PropertyFile::updateOrCreate([
                 'orig_filename' => $file['orig_filename'],
             ],[
                 'property_id' => $this->propertyId,
@@ -127,7 +127,7 @@ new class extends Component
      */
     public function openWarningDeleteModal(int $propertyPhotoId)
     {
-        $this->selectDeletePhoto = PropertyFloorPlan::find($propertyPhotoId);
+        $this->selectDeleteFloorPlan = PropertyFile::find($propertyPhotoId);
 
         $this->showModal = true;
 
@@ -137,7 +137,7 @@ new class extends Component
      */
     public function deleteFloorPlan(int $propertyPhotoId)
     {
-        $item = PropertyFloorPlan::find($propertyPhotoId);
+        $item = PropertyFile::find($propertyPhotoId);
 
         Storage::disk('s3')->delete($item->path);
 

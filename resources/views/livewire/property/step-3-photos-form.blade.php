@@ -6,7 +6,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
-use App\Models\PropertyPhotos;
+use App\Models\PropertyFile;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 
@@ -35,7 +35,7 @@ new class extends Component
      * For delete action
      */
     public $showModal = false;
-    public ?PropertyPhotos $selectDeletePhoto;
+    public ?PropertyFile $selectDeletePhoto;
     
 
     // 2mb
@@ -89,7 +89,8 @@ new class extends Component
      */
     public function refreshPhotoList(): void
     {
-        $this->photos = PropertyPhotos::where('property_id', $this->propertyId)
+        $this->photos = PropertyFile::where('property_id', $this->propertyId)
+                        ->where('type', 'gallery')
                         ->orderBy('sort_order')
                         ->get();
     }
@@ -102,7 +103,7 @@ new class extends Component
     public function reOrder(iterable $orderedIds)
     {
         foreach ($orderedIds as $index => $id) {
-            PropertyPhotos::where('id', $id)->update([
+            PropertyFile::where('id', $id)->update([
                 'sort_order' => $index + 1
             ]);
         }
@@ -135,7 +136,7 @@ new class extends Component
             list($filename, $ext) = explode('.',$file['orig_filename']);
 
             //check if the photo already exist on respective propety
-            $isPhotoExist = PropertyPhotos::whereRaw('orig_filename REGEXP ?', [
+            $isPhotoExist = PropertyFile::whereRaw('orig_filename REGEXP ?', [
                                     '^' . $filename . '(\\([0-9]+\\))?\\.[a-zA-Z0-9]+$'
                                 ])
                                 ->where([
@@ -153,7 +154,7 @@ new class extends Component
 
             // get the total number of properties and plus 1 for the sorting of the images
             // $total count + 1 = sort number of the new photo
-            $lastSortNumber = PropertyPhotos::where([
+            $lastSortNumber = PropertyFile::where([
                     'type' => 'gallery',
                     'property_id' => $this->propertyId
                 ])->count();
@@ -161,7 +162,7 @@ new class extends Component
             ++$lastSortNumber;
 
             // Store the new photo
-            PropertyPhotos::updateOrCreate([
+            PropertyFile::updateOrCreate([
                 'orig_filename' => $file['orig_filename'],
             ],[
                 'property_id' => $this->propertyId,
@@ -183,7 +184,7 @@ new class extends Component
      */
     public function openWarningDeleteModal(int $propertyPhotoId)
     {
-        $this->selectDeletePhoto = PropertyPhotos::find($propertyPhotoId);
+        $this->selectDeletePhoto = PropertyFile::find($propertyPhotoId);
 
         $this->showModal = true;
 
@@ -193,7 +194,7 @@ new class extends Component
      */
     public function deletePhoto(int $propertyPhotoId)
     {
-        $item = PropertyPhotos::find($propertyPhotoId);
+        $item = PropertyFile::find($propertyPhotoId);
 
         Storage::disk('s3')->delete($item->path);
 

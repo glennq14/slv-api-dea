@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'property_id', 'type', 'url', 'path', 'orig_filename', 'caption', 'sort_order',
     'photo_update_date',
 ])]
-#[Hidden(['property_id', 'created_at'])] class PropertyPhotos extends Model
+#[Hidden(['property_id', 'created_at'])]
+class PropertyFile extends Model
 {
     use BlameableOnCreate;
     const UPDATED_AT = null;
