@@ -20,19 +20,15 @@ new class extends Component
     public int $propertyId;
     #[Validate([
         'photos' => 'required|array|max:5', // Max 5 total files
-        'photos.*' => 'image|max:1024|mimes:jpeg,jpg,webp' // Individual rules per image
+        'photos.*' => 'image|max:1024|mimes:doc,pdf,xlsx,csv' // Individual rules per image
     ])]
-    public $photos = [];
+    public $floorPlans = [];
 
     public $tempPhotos = [];
 
     public $propertyReference = [];
 
-    // 2mb
-    // jpeg webp
-
     // .doc .pdf .docx .xlsx .csv
-
     public function mount(Property $property, $isEdit = false): void
     {
         $this->property = $property;
@@ -41,7 +37,7 @@ new class extends Component
         $this->propertyReference = $property->reference;
 
         if ($isEdit && ($property && $property->photos()->exists())) {
-            $this->photos = $property->photos()->orderBy('sort_order')->get();
+            $this->floorPlans = $property->photos()->where('type', 'floorplan')->orderBy('sort_order')->get();
         }
 
         // load tempt Images which is not yet stored in database
