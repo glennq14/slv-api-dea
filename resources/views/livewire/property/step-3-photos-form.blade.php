@@ -37,6 +37,12 @@ new class extends Component
 
     // .doc .pdf .docx .xlsx .csv
 
+    /**
+     * Summary of mount. This will initialize the class
+     * @param Property $property
+     * @param mixed $isEdit
+     * @return void
+     */
     public function mount(Property $property, $isEdit = false): void
     {
         $this->imageUrl = config('filesystems.disks.s3.url');
@@ -71,7 +77,22 @@ new class extends Component
         }
     }
 
+    /**
+     * Summary of refreshPhotoList
+     * @return void
+     */
+    public function refreshPhotoList(): void
+    {
+        $this->photos = PropertyPhotos::where('property_id', $this->propertyId)
+                        ->orderBy('sort_order')
+                        ->get();
+    }
 
+    /**
+     * Will reorder the images according to the sets
+     * @param iterable $orderedIds
+     * @return void
+     */
     public function reOrder(iterable $orderedIds)
     {
         foreach ($orderedIds as $index => $id) {
@@ -81,88 +102,50 @@ new class extends Component
         }
 
         // Refresh list
-        $this->photos = PropertyPhotos::where('property_id', $this->propertyId)
-        ->orderBy('sort_order')
-        ->get();
+        $this->refreshPhotoList();
     }
 
 
-    // for creating action
+    /**
+     * This will hundle the next page or next property form
+     * 
+     */
     #[On('parentNextStepButtonTriggered')]
     public function hundleNextStepButtonTriggered()
     {
-
         $this->dispatch( 'proceed-to-next-step', property_id: $this->property->id);
-        // try {
-
-        //     foreach ($this->tempPhotos as $key => $item) {
-        //         PropertyPhotos::create([
-        //             'property_id' => $this->propertyId,
-        //             'type' => 'gallery',
-        //             'path' => $item['path'],
-        //             'url' => $item['url'],
-        //             'orig_filename' => $item['orig_filename'],
-        //             'sort_order' => ++$key
-        //         ]);
-        //     }
-
-            
-        //  } catch (ValidationException $e) {
-        //     Log::info('Property validation error. Please double check.');
-        //     throw $e;
-        // }
+        
     }
 
-    // for edit action
-    // #[On('parentUpdateButtonTriggered')]
-    // public function handleUpdateProperty()
-    // {   
-    //      try {
-    //         foreach ($this->tempPhotos as $key => $item) {
-    //             // dd($item['orig_filename']);
-    //             PropertyPhotos::updateOrCreate([
-    //                 'orig_filename' => $item['orig_filename']
-    //             ],[
-    //                 'property_id' => $this->propertyId,
-    //                 'type' => 'gallery',
-    //                 'path' => $item['path'],
-    //                 'url' => $item['url'],
-    //                 'orig_filename' => $item['orig_filename'],
-    //                 'sort_order' => ++$key
-    //             ]);
-    //         }
-
-    //         session()->flash('success', 'Property updated successfully');
-    //      } catch (ValidationException $e) {
-    //         Log::info('Property validation error. Please double check.');
-    //         throw $e;
-    //     }
-        
-    // }
-
     /**
-     * Save every uploaded images info
+     * Save to database on every uploaded images
+     * Storage: AWS s3 bucket
      */
     public function savePhotos(array $files)
     {
         foreach ($files as $file) {
 
+            list($filename, $ext) = explode('.',$file['orig_filename']);
+
+            //check if the photo already exist on respective propety
             $isPhotoExist = PropertyPhotos::where([
                     'orig_filename' => $file['orig_filename'],
                     'type' => 'gallery',
                     'property_id' => $this->propertyId
                 ])
+                ->where('orig_filename', 'like', "%{$filename}(%)%")
                 ->count();
-
-            // if image name already exist then trancate image name with adding number at the end
+            
+            // if image name already exist, then trancate image name with adding number at the end
             // e.g:  sample-image.jpg to sample-image(1).jpg
             if ($isPhotoExist > 0) {
-                list($filename, $ext) = explode('.',$file['orig_filename']);
+                
                 ++$isPhotoExist;
-                $item['orig_filename'] = "{$filename}({$isPhotoExist}).{$ext}";
+
+                $file['orig_filename'] = "{$filename}({$isPhotoExist}).{$ext}";
             }
             
-            // get the total number of properties and plus 1 for sort sorting
+            // get the total number of properties and plus 1 for the sorting of the images
             // $total count + 1 = sort number of the new photo
             $lastSortNumber = PropertyPhotos::where([
                     'type' => 'gallery',
@@ -171,6 +154,7 @@ new class extends Component
 
             ++$lastSortNumber;
 
+            // Store the new photo
             PropertyPhotos::updateOrCreate([
                 'orig_filename' => $file['orig_filename'],
             ],[
@@ -182,14 +166,18 @@ new class extends Component
                 'sort_order' => ++$lastSortNumber,
             ]);
         }
+
+        // refresh the image list
+        $this->refreshPhotoList();
     }
 
 }
-
 ?>
-    <!-----------------------------------------
-    Basic location info
-    ----------------------------------------->
+
+<!-----------------------------------------------------------------------------
+    Property Photos Upload and reordering the display in the WP/Website
+------------------------------------------------------------------------------>
+
 <div>
     <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
@@ -206,7 +194,8 @@ new class extends Component
                         
                         <div x-data="uploadMultiple('{{ $propertyReference }}')" class="border rounded">
 
-                            <input id="dropzone-file" multiple type="file" @change="upload($event)" class="hidden"/>
+                            <!-------- To avoid traffic and multiple upload - recommend to upload single image only ---------->
+                            <input id="dropzone-file" type="file" @change="upload($event)" class="hidden" accept="image/webp, image/jpeg"/>
 
                             <div class="flex items-center justify-center w-full">
                                 <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border border-dashed rounded cursor-pointer">
@@ -218,43 +207,64 @@ new class extends Component
                                 </label>
                             </div>
 
-                            <p class="mb-5 text-sm text-gray-600"> {{ __('To organize property images, drag and drop them based on your preferred arrangement.') }}</p>
+                            <p class="p-5 text-sm text-gray-600"> {{ __('To organize property images, drag and drop them based on your preferred arrangement.') }}</p>
+                            
                             <div
                                 x-data="sortableImages()"
                                 x-init="init()" 
-                                class="grid grid-cols-4 gap-3 mt-2 p-3"
-                            ><
+                                class="grid grid-cols-4 gap-3 p-3 bg-gray-200"
+                            >
+                            <?php /*
+                                <template x-for="file in files" :key="file.path" x-data="{ isLoaded: false }">
+                                    <div
+                                        data-id=""
+                                        class="border p-2 cursor-move bg-white shadow relative">
+                                        <!-- PROGRESS BAR -->
+                                        <div role="progress" class="uploadStatus absolute inset-0 m-auto z-10" x-show="!isLoaded">
+                                            <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>    
+
+                                        <!-- IMAGE -->
+                                        <img 
+                                            :src="file.url"
+                                            x-show="isLoaded"
+                                            @load="isLoaded = true"
+                                            width="300"
+                                            class="hidden"
+                                        />
+                                    </div>
+                                </template>
+                                */ ?>
                                 @foreach ( $photos as $photo )
                                     <div 
                                         data-id="{{ $photo->id }}"
-                                        class="border p-2 cursor-move bg-white shadow"
+                                        class="border p-2 cursor-move bg-white shadow relative"
+                                        x-data="{ isLoaded: false }"
                                     >
-                                        <img src="{{ $photo->url }}"/>
+                                        <!-- PROGRESS BAR -->
+                                        <div role="progress" class="uploadStatus absolute inset-0 m-auto z-10" x-show="!isLoaded" wire:loading.remove>
+                                            <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div> 
+
+                                        <img src="{{ $photo->url }}"
+                                            x-show="isLoaded"
+                                            @load="isLoaded = true"
+                                            x-init="if ($el.complete) isLoaded = true"
+                                            x-show="isLoaded"
+                                            class="transition-opacity duration-300"
+                                        />
                                     </div>
                                 @endforeach 
                             </div>
-                            <template x-for="file in files" :key="file.path" x-data="{ isLoaded: false }">
-                                <div
-                                    data-id=""
-                                    class="border p-2 cursor-move bg-white shadow relative">
-                                    <!-- PROGRESS BAR -->
-                                    <div role="progress" class="uploadStatus absolute inset-0 m-auto z-10" x-show="!isLoaded">
-                                        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                        </svg>
-                                        <span class="sr-only">Loading...</span>
-                                    </div>    
-
-                                    <!-- IMAGE -->
-                                    <img 
-                                        :src="file.url"
-                                        x-show="isLoaded"
-                                        @load="isLoaded = true"
-                                        width="300"
-                                    />
-                                </div>
-                            </template>
+                           
                         </div> 
                     </form>
                 </div>
@@ -324,89 +334,92 @@ new class extends Component
 @script
 <script>
     let imageType = 'galleries';
-    
+    /**@abstract */
     window.isUploading = function() {
         return this.files.some(file => file.progress < 100);
     }
 
+    /***************************
+     * Upload Multiple images
+     ***************************/
     window.uploadMultiple = function (folder) {
-    return {
-        imageType: 'galleries',
-        files: [],
-        galleries: [], 
+        return {
+            imageType: 'galleries',
+            files: [],
+            galleries: [], 
 
-        async upload(event) {
-            showLoading = true;
+            async upload(event) {
+                showLoading = true;
 
-            let uploads = [];
+                let uploads = [];
 
-            for (let file of event.target.files) {
-                uploads.push(this.uploadSingle(file, folder));
+                for (let file of event.target.files) {
+                    uploads.push(this.uploadSingle(file, folder));
+                }
+
+                await Promise.all(uploads);
+                $wire.savePhotos(this[this.imageType]);
+                // @this.set('tempPhotos', this[this.imageType]);
+            },
+
+            uploadSingle(file, folder) {
+                return new Promise((resolve, reject) => {
+
+                    let fileProgress = { 
+                        id: Date.now() + Math.random(),
+                        progress: 0
+                    };
+
+                    let formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('folder', folder);
+
+                    const xhr = new XMLHttpRequest();
+
+                    xhr.open('POST', '/s3/file-upload', true);
+                    xhr.setRequestHeader(
+                        'X-CSRF-TOKEN',
+                        document.querySelector('meta[name="csrf-token"]').content
+                    );
+
+                    xhr.upload.onprogress = (e) => {
+                        if (e.lengthComputable) {
+                            fileProgress.progress = Math.round((e.loaded / e.total) * 100);
+                        }
+                    };
+
+                    xhr.onload = () => {
+                        if (xhr.status === 200) {
+                            const res = JSON.parse(xhr.responseText);
+
+                            // this.files.push({
+                            //     orig_filename: res.orig_filename,
+                            //     path: res.path,
+                            //     url: res.url,
+                            //     progress: fileProgress,
+                            //     ext: res.ext
+                            // });
+
+                            this[this.imageType].push({
+                                orig_filename: res.orig_filename,
+                                path: res.path,
+                                url: res.url,
+                                ext: res.ext
+                            });
+
+                            resolve();
+                        } else {
+                            reject();
+                        }
+                    };
+
+                    xhr.onerror = reject;
+
+                    xhr.send(formData);
+                });
             }
-
-            await Promise.all(uploads);
-            $wire.savePhotos(this[this.imageType]);
-            // @this.set('tempPhotos', this[this.imageType]);
-        },
-
-        uploadSingle(file, folder) {
-            return new Promise((resolve, reject) => {
-
-                let fileProgress = { 
-                    id: Date.now() + Math.random(),
-                    progress: 0
-                };
-
-                let formData = new FormData();
-                formData.append('file', file);
-                formData.append('folder', folder);
-
-                const xhr = new XMLHttpRequest();
-
-                xhr.open('POST', '/s3/file-upload', true);
-                xhr.setRequestHeader(
-                    'X-CSRF-TOKEN',
-                    document.querySelector('meta[name="csrf-token"]').content
-                );
-
-                xhr.upload.onprogress = (e) => {
-                    if (e.lengthComputable) {
-                        fileProgress.progress = Math.round((e.loaded / e.total) * 100);
-                    }
-                };
-
-                xhr.onload = () => {
-                    if (xhr.status === 200) {
-                        const res = JSON.parse(xhr.responseText);
-
-                        this.files.push({
-                            orig_filename: res.orig_filename,
-                            path: res.path,
-                            url: res.url,
-                            progress: fileProgress,
-                            ext: res.ext
-                        });
-
-                        this[this.imageType].push({
-                            orig_filename: res.orig_filename,
-                            path: res.path,
-                            url: res.url,
-                            ext: res.ext
-                        });
-
-                        resolve();
-                    } else {
-                        reject();
-                    }
-                };
-
-                xhr.onerror = reject;
-
-                xhr.send(formData);
-            });
         }
     }
-}
 
 /**@abstract Sorting feature */
 window.sortableImages = function() {
