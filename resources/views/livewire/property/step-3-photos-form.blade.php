@@ -51,17 +51,18 @@ new class extends Component
      */
     public function mount(Property $property, $isEdit = false): void
     {
-        $this->imageUrl = config('filesystems.disks.s3.url');
-        $this->property = $property;
-        $this->isEdit   = $isEdit;
-        $this->propertyId = $property->id;
+        $this->imageUrl          = config('filesystems.disks.s3.url');
+        $this->property          = $property;
+        $this->isEdit            = $isEdit;
+        $this->propertyId        = $property->id;
         $this->propertyReference = $property->reference;
+
         if ($isEdit && ($property && $property->photos()->exists())) {
             $this->photos = $property->photos()->orderBy('sort_order')->get();
         }
 
         // load tempt Images which is not yet stored in database
-        $this->getS3TempPhotos();
+        // $this->getS3TempPhotos();
     }
 
     /**
@@ -103,15 +104,19 @@ new class extends Component
     public function reOrder(iterable $orderedIds)
     {
         foreach ($orderedIds as $index => $id) {
-            PropertyFile::where('id', $id)->update([
-                'sort_order' => $index + 1
-            ]);
+            try {
+                PropertyFile::where('id', $id)->update([
+                    'sort_order' => $index + 1
+                ]);
+            } catch (ErrorException $e) {
+                Log::error('Sorting properties: ' . $e);
+                throw $e;
+            }
         }
 
         // Refresh list
         $this->refreshPhotoList();
     }
-
 
     /**
      * This will hundle the next page or next property form
@@ -132,11 +137,12 @@ new class extends Component
     public function savePhotos(array $files)
     {
         foreach ($files as $file) {
-            Log::info("files upload detail: " . json_encode($file));
-            list($filename, $ext) = explode('.',$file['orig_filename']);
+            try {
 
-            //check if the photo already exist on respective propety
-            $isPhotoExist = PropertyFile::whereRaw('orig_filename REGEXP ?', [
+                list($filename, $ext) = explode('.', $file['orig_filename']);
+
+                //check if the photo already exist on respective propety
+                $isPhotoExist = PropertyFile::whereRaw('orig_filename REGEXP ?', [
                                     '^' . $filename . '(\\([0-9]+\\))?\\.[a-zA-Z0-9]+$'
                                 ])
                                 ->where([
@@ -145,33 +151,38 @@ new class extends Component
                                 ])
                                 ->count();
             
-            // if image name already exist, then trancate image name with adding number at the end
-            // e.g:  sample-image.jpg to sample-image(1).jpg
-            if ($isPhotoExist > 0) {
-                ++$isPhotoExist;
-                $file['orig_filename'] = "{$filename}({$isPhotoExist}).{$ext}";
-            }
+                // if image name already exist, then trancate image name with adding number at the end
+                // e.g:  sample-image.jpg to sample-image(1).jpg
+                if ($isPhotoExist > 0) {
+                    ++$isPhotoExist;
+                    $file['orig_filename'] = "{$filename}({$isPhotoExist}).{$ext}";
+                }
 
-            // get the total number of properties and plus 1 for the sorting of the images
-            // $total count + 1 = sort number of the new photo
-            $lastSortNumber = PropertyFile::where([
+                // get the total number of properties and plus 1 for the sorting of the images
+                // $total count + 1 = sort number of the new photo
+                $lastSortNumber = PropertyFile::where([
+                        'type' => 'gallery',
+                        'property_id' => $this->propertyId
+                    ])->count();
+
+                ++$lastSortNumber;
+
+                // Store the new photo
+                PropertyFile::updateOrCreate([
+                    'orig_filename' => $file['orig_filename'],
+                    'property_id' => $this->propertyId,
+                ],[
                     'type' => 'gallery',
-                    'property_id' => $this->propertyId
-                ])->count();
+                    'path' => $file['path'],
+                    'url' => $file['url'],
+                    'orig_filename' => $file['orig_filename'],
+                    'sort_order' => ++$lastSortNumber,
+                ]);
 
-            ++$lastSortNumber;
-
-            // Store the new photo
-            PropertyFile::updateOrCreate([
-                'orig_filename' => $file['orig_filename'],
-            ],[
-                'property_id' => $this->propertyId,
-                'type' => 'gallery',
-                'path' => $file['path'],
-                'url' => $file['url'],
-                'orig_filename' => $file['orig_filename'],
-                'sort_order' => ++$lastSortNumber,
-            ]);
+            } catch (ErrorException $e) {
+                Log::error('Saving uploaded photos error: ' . $e);
+                throw $e;
+            }
         }
 
         // refresh the image list
@@ -189,6 +200,16 @@ new class extends Component
         $this->showModal = true;
 
     }
+
+    /*******************************
+     * Just close the warning delete modal
+     **/
+    public function closeWarningDeleteModal()
+    {
+        // refresh the image list
+        $this->showModal = false;
+    }
+
     /*******************************
      * Delete photo from database to AWS S3
      */
@@ -204,6 +225,8 @@ new class extends Component
         $this->refreshPhotoList();
         $this->showModal = false;
     }
+
+    
 
     /**
      * Temporary file delete action
@@ -231,7 +254,7 @@ new class extends Component
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
-                    <form wire:submit.prevent="save">
+                    <!-- <form wire:submit.prevent="save"> -->
                         <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
                             {{ __('Photos')  }}
                         </h3>
@@ -302,16 +325,20 @@ new class extends Component
                                             <p class="mt-2 text-sm text-gray-500">This delete action cannot be undone. Proceed?</p>
                                             
                                             <div class="mt-4 flex justify-end space-x-2">
-                                                <button type="button" wire:confirm="$set('showModal', false)" class="px-4 py-2 border rounded text-gray-700">
+                                                <button
+                                                    wire:click="$set('showModal', false)" 
+                                                    class="px-4 py-2 border rounded text-gray-700"
+                                                >
                                                     Cancel
                                                 </button>
-                                                <button type="button" 
-                                                    wire:click="deletePhoto({{ $selectDeletePhoto->id }})" 
-                                                    class="px-4 py-2 bg-red-600 text-white rounded"
+                                                <button
+                                                    wire:click="deletePhoto({{ $selectDeletePhoto->id }})"
                                                     wire:loading.class="opacity-50"
+                                                    wire:target="deletePhoto"
+                                                    class="px-4 py-2 bg-red-600 text-white rounded"
                                                 >
-                                                    <span wire:loading.remove>&#x21bb; {{ __('Confirm') }} </span>
-                                                    <span wire:loading>
+                                                    <span wire:loading.remove wire:target="deletePhoto">&#x21bb; {{ __('Confirm') }} </span>
+                                                    <span wire:loading wire:target="deletePhoto">
                                                         Deleting..
                                                     </span>
                                                 </button>
@@ -327,7 +354,7 @@ new class extends Component
                                 </button>
                             @endforeach
                         </div> 
-                    </form>
+                    <!-- </form> -->
                 </div>
             </div>
         </div>

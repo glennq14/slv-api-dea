@@ -58,7 +58,7 @@ class Property extends Model
         return $this->hasOne(PropertyContactDetail::class);
     }
 
-    public function photo(): HasMany
+    public function photos(): HasMany
     {
         return $this->hasMany(PropertyFile::class)->where('type', 'gallery'); //set for gallery images
     }
