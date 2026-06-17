@@ -645,7 +645,7 @@ Basic location info
                             @error('lawyer_last_name') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label for="layerTelephoneDay" class="required-field block text-black text-sm mb-1">{{ __('Telephone Day') }}</label>
+                            <label for="layerTelephoneDay" class="required-field block text-black text-sm mb-1">{{ __('Telephone') }}</label>
                             <input type="text" wire:model.live="lawyer_telephone_day" id="lawyerTelephoneDay" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                             @error('lawyer_telephone_day') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
