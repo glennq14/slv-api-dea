@@ -22,7 +22,7 @@ new class extends Component
     #[Validate('required|string')]
     public string $phone_number;
 
-    #[Validate('required|string')]
+    #[Validate('nullable')]
     public string $mobile_number;
 
     #[Validate('required|email')]
@@ -131,7 +131,7 @@ new class extends Component
                 $this->account_number   = $bank->account_number;
                 $this->address          = $bank->address;
                 $this->contact_name     = $bank->contact_name;
-                $this->contact_phone    = $bank->contact_phone;
+                $this->contact_name     = $bank->contact_name;
                 $this->contact_email    = $bank->contact_email;
             }
 
