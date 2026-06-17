@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('schools')->default(0)->nullable();
             $table->integer('resorts')->default(0)->nullable();
 
-            $table->integer('terrace')->default(0)->index();
+            $table->integer('terrace')->default(0)->nullable();
             $table->integer('attic')->default(0)->nullable();
             $table->integer('roof_garden')->default(0)->nullable();
             $table->integer('covered_veranda')->default(0)->nullable();

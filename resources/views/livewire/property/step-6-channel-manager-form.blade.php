@@ -25,11 +25,15 @@ new class extends Component
         $this->isEdit   = $isEdit;
 
         if ($this->isEdit && isset($property->id)) {
-            $externalFeeds = PropertyNetworks::where(['property_id' => $property->id])->first()->external_feeds;
-            $this->external_feeds = unserialize($externalFeeds);
+            $networks = PropertyNetworks::where(['property_id' => $property->id]);
+            if ($networks->first()->external_feeds) {
+                $this->external_feeds = unserialize($networks->first()->external_feeds);
+            }
 
-            $websiteBanner = PropertyNetworks::where(['property_id' => $property->id])->first()->website_banner;
-            $this->website_banner = unserialize($websiteBanner);
+            $websiteBanner = PropertyNetworks::where(['property_id' => $property->id]);
+            if ($websiteBanner->first()->website_banner) {
+                $this->website_banner = unserialize($websiteBanner->first()->website_banner);
+            }
         }
     }
 
