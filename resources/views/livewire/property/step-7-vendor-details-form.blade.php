@@ -22,7 +22,7 @@ new class extends Component
     #[Validate('required|string')]
     public string $phone_number;
 
-    #[Validate('required|string')]
+    #[Validate('nullable')]
     public string $mobile_number;
 
     #[Validate('required|email')]
@@ -131,33 +131,11 @@ new class extends Component
                 $this->account_number   = $bank->account_number;
                 $this->address          = $bank->address;
                 $this->contact_name     = $bank->contact_name;
-                $this->contact_phone    = $bank->contact_phone;
+                $this->contact_name     = $bank->contact_name;
                 $this->contact_email    = $bank->contact_email;
             }
 
-
-            $vendorDetail = PropertyContactDetail::where([
-                                    'property_id' => $property->id,
-                                ])->first();
-
-            if ($vendorDetail) {
-
-                $this->first_name           = $vendorDetail->first_name;
-                $this->last_name            = $vendorDetail->last_name;
-                $this->phone_number         = $vendorDetail->phone_number;
-                $this->mobile_number        = $vendorDetail->mobile_number;
-                $this->email                = $vendorDetail->email;
-                $this->notes                = $vendorDetail->notes;
-                $this->lawyer_first_name    = $vendorDetail->lawyer_first_name;
-                $this->lawyer_last_name     = $vendorDetail->lawyer_last_name;
-                $this->lawyer_telephone_day = $vendorDetail->lawyer_telephone_day;
-                $this->lawyer_email         = $vendorDetail->lawyer_email;
-                $this->lawyer_address       = $vendorDetail->lawyer_address;
-            }
-
-
             $this->refreshVendorFileList();
-            
         }
         
     }
