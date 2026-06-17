@@ -26,12 +26,12 @@ new class extends Component
 
         if ($this->isEdit && isset($property->id)) {
             $networks = PropertyNetworks::where(['property_id' => $property->id]);
-            if (!$networks->first()->external_feeds) {
+            if ($networks->first()->external_feeds !== null) {
                 $this->external_feeds = unserialize($networks->first()->external_feeds);
             }
 
             $websiteBanner = PropertyNetworks::where(['property_id' => $property->id]);
-            if (!$websiteBanner->first()->website_banner) {
+            if (!$websiteBanner->first()->website_banner !== null) {
                 $this->website_banner = unserialize($websiteBanner->first()->website_banner);
             }
         }
