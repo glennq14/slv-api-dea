@@ -12,52 +12,52 @@ new class extends Component
      * disatances
      */
     #[Validate('nullable')]
-    public int $amenities;
+    public ?int $amenities = null;
 
     #[Validate('nullable')]
-    public int $airport;
+    public ?int $airport = null;
 
     #[Validate('nullable')]
-    public int $sea;
+    public ?int $sea = null;
 
     #[Validate('nullable')]
-    public int $public_transport;
+    public ?int $public_transport = null;
 
     #[Validate('nullable')]
-    public int $schools;
+    public ?int $schools = null;
 
     #[Validate('nullable')]
-    public int $resorts;
+    public ?int $resorts = null;
 
     /**********************
      * Additional Area
      */
     #[Validate('nullable')]
-    public int $terrace;
+    public ?int $terrace= null;
 
     #[Validate('nullable')]
-    public int $attic;
+    public ?int $attic= null;
 
     #[Validate('nullable')]
-    public int $roof_garden;
+    public ?int $roof_garden= null;
 
     #[Validate('nullable')]
-    public int $covered_veranda;
+    public ?int $covered_veranda= null;
 
     #[Validate('nullable')]
-    public int $uncovered_veranda;
+    public ?int $uncovered_veranda= null;
 
     #[Validate('nullable')]
-    public int $covered_parking;
+    public ?int $covered_parking= null;
 
     #[Validate('nullable')]
-    public int $basement;
+    public ?int $basement= null;
 
     #[Validate('nullable')]
-    public int $courtyard;
+    public ?int $courtyard= null;
 
     #[Validate('nullable')]
-    public int $garden;
+    public ?int $garden= null;
 
     public ?Property $property;
 
@@ -70,22 +70,21 @@ new class extends Component
 
         if ($property && $property->amenities()->exists()) {
             $amenities               = $this->property->amenities;
-            $amenities->amenities = 5;
-            $this->amenities         = $amenities->amenities ?? 0;
-            $this->airport           = $amenities->airport ?? 0;
-            $this->sea               = $amenities->sea ?? 0;
-            $this->public_transport  = $amenities->public_transport ?? 0;
-            $this->schools           = $amenities->schools ?? 0;
-            $this->resorts           = $amenities->resorts ?? 0;
-            $this->terrace           = $amenities->terrace ?? 0;
-            $this->attic             = $amenities->attic ?? 0;
-            $this->roof_garden       = $amenities->roof_garden ?? 0;
-            $this->covered_veranda   = $amenities->covered_veranda ?? 0;
-            $this->uncovered_veranda = $amenities->uncovered_veranda ?? 0;
-            $this->covered_parking   = $amenities->covered_parking ?? 0;
-            $this->basement          = $amenities->basement ?? 0;
-            $this->courtyard         = $amenities->courtyard ?? 0;
-            $this->garden            = $amenities->garden ?? 0;
+            $this->amenities         = $amenities->amenities;
+            $this->airport           = $amenities->airport;
+            $this->sea               = $amenities->sea;
+            $this->public_transport  = $amenities->public_transport;
+            $this->schools           = $amenities->schools;
+            $this->resorts           = $amenities->resorts;
+            $this->terrace           = $amenities->terrace;
+            $this->attic             = $amenities->attic;
+            $this->roof_garden       = $amenities->roof_garden;
+            $this->covered_veranda   = $amenities->covered_veranda;
+            $this->uncovered_veranda = $amenities->uncovered_veranda;
+            $this->covered_parking   = $amenities->covered_parking;
+            $this->basement          = $amenities->basement;
+            $this->courtyard         = $amenities->courtyard;
+            $this->garden            = $amenities->garden;
         }
     }
 

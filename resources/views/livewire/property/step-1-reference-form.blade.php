@@ -75,7 +75,7 @@ new class extends Component
     public string $pool = 'yes';
 
     #[Validate('nullable')]
-    public bool $is_poa = false;
+    public bool $is_poa;
 
     #[Validate('nullable')]
     public string $title_deeds = 'available';
@@ -216,25 +216,34 @@ new class extends Component
     //Update
     #[On('parentUpdateButtonTriggered')]
     public function handleUpdateProperty()
-    { Log::info('uupdatee click');
-        $validatedData = $this->validate();
-        $validatedData['reference'] = $validatedData['edit_reference']; //change value of reference
-        unset($validatedData['edit_reference']);
-        if ($this->property && $this->property->exists) {
-            $price = [
-                'is_poa' => $validatedData['is_poa'],
-                'basic_price' => $validatedData['basic_price'],
-                'commission' => $validatedData['commission'],
-                'communal_charge' => $validatedData['communal_charge']
-            ];
+    {   $result = $this->property->update($this->validate());
+        dd($this->validate);
+        try {
 
-            $this->property->update($validatedData);
-            $this->property->price()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $price);
+            $validatedData = $this->validate();
+            $validatedData['reference'] = $validatedData['edit_reference']; //change value of reference
+            
+            unset($validatedData['edit_reference']);
+            
+            if ($this->property && $this->property->exists) {
+                $price = [
+                    'is_poa' => $validatedData['is_poa'],
+                    'basic_price' => $validatedData['basic_price'],
+                    'commission' => $validatedData['commission'],
+                    'communal_charge' => $validatedData['communal_charge']
+                ];
 
-            session()->flash('success', 'Property has been successfully updated!');
+                $this->property->update($validatedData);
+                $this->property->price()->updateOrCreate([
+                        'property_id' => $this->property->id,
+                    ],
+                    $price);
+
+                session()->flash('success', 'Property has been successfully updated!');
+            }
+        } catch (ValidationException $e) {
+            Log::info('Property validation error. Please double check.' . $e);
+            throw $e;
         }
     }
 
