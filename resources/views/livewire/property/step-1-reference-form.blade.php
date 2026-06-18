@@ -551,6 +551,7 @@ Basic information about the property
             </div>
         </div>
     </div>
+    <? /*
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
@@ -580,6 +581,7 @@ Basic information about the property
             </div>
         </div>
     @endif
+    */ ?>
     @if (session()->has('success'))
         <div x-data="{ show: true }"
             x-show="show"

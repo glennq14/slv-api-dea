@@ -70,21 +70,22 @@ new class extends Component
 
         if ($property && $property->amenities()->exists()) {
             $amenities               = $this->property->amenities;
-            $this->amenities         = $amenities->amenities;
-            $this->airport           = $amenities->airport;
-            $this->sea               = $amenities->sea;
-            $this->public_transport  = $amenities->public_transport;
-            $this->schools           = $amenities->schools;
-            $this->resorts           = $amenities->resorts;
-            $this->terrace           = $amenities->terrace;
-            $this->attic             = $amenities->attic;
-            $this->roof_garden       = $amenities->roof_garden;
-            $this->covered_veranda   = $amenities->covered_veranda;
-            $this->uncovered_veranda = $amenities->uncovered_veranda;
-            $this->covered_parking   = $amenities->covered_parking;
-            $this->basement          = $amenities->basement;
-            $this->courtyard         = $amenities->courtyard;
-            $this->garden            = $amenities->garden;
+            $amenities->amenities = 5;
+            $this->amenities         = $amenities->amenities ?? 0;
+            $this->airport           = $amenities->airport ?? 0;
+            $this->sea               = $amenities->sea ?? 0;
+            $this->public_transport  = $amenities->public_transport ?? 0;
+            $this->schools           = $amenities->schools ?? 0;
+            $this->resorts           = $amenities->resorts ?? 0;
+            $this->terrace           = $amenities->terrace ?? 0;
+            $this->attic             = $amenities->attic ?? 0;
+            $this->roof_garden       = $amenities->roof_garden ?? 0;
+            $this->covered_veranda   = $amenities->covered_veranda ?? 0;
+            $this->uncovered_veranda = $amenities->uncovered_veranda ?? 0;
+            $this->covered_parking   = $amenities->covered_parking ?? 0;
+            $this->basement          = $amenities->basement ?? 0;
+            $this->courtyard         = $amenities->courtyard ?? 0;
+            $this->garden            = $amenities->garden ?? 0;
         }
     }
 
@@ -254,6 +255,7 @@ Add your form or content for adding a property here
             </div>
         </div>
     </div>
+    <?php /*
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
@@ -282,7 +284,7 @@ Add your form or content for adding a property here
                 </div>
             </div>
         </div>
-    @endif
+    @endif */?>
     @if (session()->has('success'))
         <div x-data="{ show: true }"
             x-show="show"

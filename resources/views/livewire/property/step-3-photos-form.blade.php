@@ -399,7 +399,7 @@ new class extends Component
             </div>
         </div>
     </div>
-
+<?php /*
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
@@ -428,7 +428,7 @@ new class extends Component
                 </div>
             </div>
         </div>
-    @endif
+    @endif */ ?>
     @if (session()->has('success'))
         <div x-data="{ show: true }"
             x-show="show"

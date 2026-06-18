@@ -664,6 +664,7 @@ Basic location info
             </div>
         </div>
     </div>
+    <?php /*
     @if ($errors->any())
         <div x-data="{ show: true }"
             x-show="show"
@@ -692,7 +693,7 @@ Basic location info
                 </div>
             </div>
         </div>
-    @endif
+    @endif */?>
     @if (session()->has('success'))
         <div x-data="{ show: true }"
             x-show="show"
