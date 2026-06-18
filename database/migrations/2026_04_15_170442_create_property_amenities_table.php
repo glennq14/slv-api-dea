@@ -18,22 +18,22 @@ return new class extends Migration
                 ->references('id')
                 ->on('properties')
                 ->onDelete('cascade');
-            $table->integer('amenities')->default(0)->nullable();
-            $table->integer('airport')->default(0)->nullable();
-            $table->integer('sea')->default(0)->nullable();
-            $table->integer('public_transport')->default(0)->nullable();
-            $table->integer('schools')->default(0)->nullable();
-            $table->integer('resorts')->default(0)->nullable();
+            $table->integer('amenities')->nullable();
+            $table->integer('airport')->nullable();
+            $table->integer('sea')->nullable();
+            $table->integer('public_transport')->nullable();
+            $table->integer('schools')->nullable();
+            $table->integer('resorts')->nullable();
 
-            $table->integer('terrace')->default(0)->nullable();
-            $table->integer('attic')->default(0)->nullable();
-            $table->integer('roof_garden')->default(0)->nullable();
-            $table->integer('covered_veranda')->default(0)->nullable();
-            $table->integer('uncovered_veranda')->default(0)->nullable();
-            $table->integer('covered_parking')->default(0)->nullable();
-            $table->integer('basement')->default(0)->nullable();
-            $table->integer('courtyard')->default(0)->nullable();
-            $table->integer('garden')->default(0)->nullable();
+            $table->integer('terrace')->nullable();
+            $table->integer('attic')->nullable();
+            $table->integer('roof_garden')->nullable();
+            $table->integer('covered_veranda')->nullable();
+            $table->integer('uncovered_veranda')->nullable();
+            $table->integer('covered_parking')->nullable();
+            $table->integer('basement')->nullable();
+            $table->integer('courtyard')->nullable();
+            $table->integer('garden')->nullable();
             $table->timestamps();
         });
     }
