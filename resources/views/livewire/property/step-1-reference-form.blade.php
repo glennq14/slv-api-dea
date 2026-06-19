@@ -17,10 +17,10 @@ new class extends Component
      * Validateion 
      ************************/
     // #[Validate('required|string|unique:properties,id')]
-    public string $edit_reference = '';
+    // public string $edit_reference = '';
     
     // #[Validate('required|string|unique:properties,id')] //edit only
-    // #[Validate('required|string|unique:properties,reference')]
+    #[Validate('required|string')]
     public string $reference = '';
 
     #[Validate('required|numeric')]
@@ -47,7 +47,7 @@ new class extends Component
     // #[Validate('required|integer|digits:4|min:1900|max:3050')]
     public int $year_of_construction;
 
-    #[Validate('required|string')]
+    #[Validate('nullable')]
     public string $pool_description;
 
     #[Validate('required|numeric')]
@@ -75,7 +75,7 @@ new class extends Component
     public string $pool = 'yes';
 
     #[Validate('nullable')]
-    public bool $is_poa;
+    public bool $is_poa = false;
 
     #[Validate('nullable')]
     public string $title_deeds = 'available';
@@ -126,7 +126,7 @@ new class extends Component
     protected function validationAttributes()
     {
         return [
-            'edit_reference' => 'reference',
+            // 'edit_reference' => 'reference',
             'property_type_id' => 'property Type',
             'managing_agent_user_id' => 'managing agent'
         ];
@@ -187,18 +187,14 @@ new class extends Component
     { 
         try {
             
-            $this->edit_reference = 'XDIRTY-CREATE1';
             $validatedData = $this->validate();
-            
-            unset($validatedData['edit_reference']);
-            $price = [
-                'is_poa' => $validatedData['is_poa'],
-                'basic_price' => $validatedData['basic_price'],
-                'commission' => $validatedData['commission'],
-                'communal_charge' => $validatedData['communal_charge']
-            ];
 
-            $validatedData['reference'] = strtoupper($validatedData['reference']);
+            $price = [
+                'is_poa'            => $validatedData['is_poa'],
+                'basic_price'       => $validatedData['basic_price'],
+                'commission'        => $validatedData['commission'],
+                'communal_charge'   => $validatedData['communal_charge']
+            ];
 
             $newProperty = Property::create($validatedData);
             $newProperty->price()->updateOrCreate([
@@ -220,16 +216,13 @@ new class extends Component
     {   try {
 
             $validatedData = $this->validate();
-            // $validatedData['reference'] = $validatedData['edit_reference']; //change value of reference
-            
-            // unset($validatedData['edit_reference']);
             
             if ($this->property && $this->property->exists) {
                 $price = [
-                    'is_poa' => $validatedData['is_poa'],
-                    'basic_price' => $validatedData['basic_price'],
-                    'commission' => $validatedData['commission'],
-                    'communal_charge' => $validatedData['communal_charge']
+                    'is_poa'            => $validatedData['is_poa'],
+                    'basic_price'       => $validatedData['basic_price'],
+                    'commission'        => $validatedData['commission'],
+                    'communal_charge'   => $validatedData['communal_charge']
                 ];
 
                 $this->property->update($validatedData);
@@ -447,7 +440,7 @@ Basic information about the property
                             </div>
                         </div>
                         <div class="flex-1">
-                            <label for="pool_description" class="required-field block text-black text-sm mb-1">{{ __('Pool Description') }}</label>
+                            <label for="pool_description" class="block text-black text-sm mb-1">{{ __('Pool Description') }}</label>
                             <input type="text" wire:model.live.debounce.500ms="pool_description" id="pool_description" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter pool details (e.g. Infinity, Heated, Shared)" required />
                             @error('pool_description') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
