@@ -89,7 +89,7 @@ Add your form or content for adding a property here
                         {{ __('Key Features')  }}
                     </h3>
                     <p class="mb-5 text-sm text-gray-600">{{ __('Tick the key features of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
-                     <livewire:accordion-key-features :property="$property"/>
+                     <livewire:accordion-key-features :property="$property" :isEdit="$isEdit"/>
                 </div>  
             </div>
         </div>

@@ -534,6 +534,36 @@ class AccordionKeyFeatures extends Component
     {
         $this->property = $property;
         $this->isEdit   = $isEdit;
+        // dd($this->keyFeatures);
+        if ($isEdit) {
+            $keyFeatures = $this->property->keyFeatures()->get();
+            $keyFeaturesWithValue = [];
+            foreach ($keyFeatures as $keyfeature) {
+                if (!isset($keyFeaturesWithValue[$keyfeature->name])) {
+                    $keyFeaturesWithValue[$keyfeature->name] = [];
+                }
+
+                $keyFeaturesWithValue[$keyfeature->name] += [
+                    "keyFeatures.{$keyfeature->name}.{$keyfeature->field}" => $keyfeature->value
+                ];
+            }
+            
+            foreach ($this->keyFeatures as &$varKeyFeature) {
+                $key = str_replace(' ', '_', strtolower($varKeyFeature['title']));
+                if(isset($keyFeaturesWithValue[$key])) {
+                    foreach ($varKeyFeature['fields'] as &$field) {
+                        if (isset($keyFeaturesWithValue[$key]) ) {
+                            if (isset($keyFeaturesWithValue[$key][$field['name']])) {
+                                $field['value'] = ((int) $keyFeaturesWithValue[$key][$field['name']] == 1 ) ? true : false;
+                            }
+                        }
+                        continue;
+                    }
+                }
+                unset($varKeyFeature);
+                
+            }
+        }
     }
 
     #[On('parentNextStepButtonTriggered')]

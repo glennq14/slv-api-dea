@@ -34,7 +34,7 @@
                             @foreach ($item['fields'] as $field)
                             <div wire:ignore.self class="border border-gray-300 flex items-center rounded p-2">
                                 <span>{{ $field['label'] }}</span>
-                                <input type="checkbox" class="ml-auto rounded border-gray-400" wire:model="{{ $field['name'] }}" {{ $field['value'] ? 'checked' : '' }} />
+                                <input type="checkbox" class="ml-auto rounded border-gray-400" wire:model="{{ $field['name'] }}" value="1" checked />
                             </div>
                             @endforeach
                             @endif
