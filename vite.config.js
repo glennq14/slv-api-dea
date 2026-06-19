@@ -6,7 +6,6 @@ export default defineConfig({
         laravel([
             'resources/css/app.css',
             'resources/js/app.js',
-            'resources/js/Sortable.min'
         ]),
     ],
 })

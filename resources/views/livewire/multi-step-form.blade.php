@@ -63,7 +63,13 @@
 
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 flex justify-end">
-            <div>
+            <div x-data x-init="
+                $nextTick(() => {
+                    Sortable.create($refs.items, {
+                        animation: 150
+                    })
+                })
+                ">
                 
                 @if ( !$isEdit )   
                     @if ( $currentStep > 1 )
@@ -214,7 +220,7 @@
     </script>
 @endscript
 @push('scripts')
-    @vite(['resources/js/Sortable.min.js'])
+    <!-- @vite(['resources/js/Sortable.min.js']) -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjtQlPL0rirZ70g8Xew5Ol3mqhqmAju08&&callback=initMap&loading=async&libraries=places"></script>
     <script src="{{ asset('/js/google.map.js') }}" defer></script>
 @endpush
