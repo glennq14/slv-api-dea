@@ -8,13 +8,21 @@ use Illuminate\Support\Facades\Log;
 
 new class extends Component
 {
+    
     public ?Property $property;
 
     public bool $isEdit = false;
 
+    protected function rules()
+    {
+        return [
+            'keyFeatures.*.field.*.value' => 'boolean',
+        ];
+    }
+
     public function mount(Property $property, $isEdit = false): void
     {
-        $this->property =  $property;
+        $this->property = $property;
         $this->isEdit   = $isEdit;
     }
 
@@ -23,7 +31,7 @@ new class extends Component
     {
         try {
             $validatedData = $this->validate();
-            $this->property->keyFeature()->updateOrCreate([
+            $this->property->keyFeatures()->updateOrCreate([
                     'property_id' => $this->property->id,
                 ],
                 $validatedData
@@ -36,26 +44,30 @@ new class extends Component
         }
     }
 
-    // for edit action
-    #[On('parentUpdateButtonTriggered')]
-    public function handleUpdateProperty()
-    {   
-        try {
-            $validatedData = $this->validate();
-
-            $this->property->keyFeature()->updateOrCreate([
-                    'property_id' => $this->property->id,
-                ],
-                $validatedData
-            );
-
-            session()->flash('success', 'Property updated successfully');
-         } catch (ValidationException $e) {
-            Log::info('Property validation error. Please double check.');
-            throw $e;
-        }
-        
+    #[On('update-is-success')]
+    public function updateSuccess()
+    {
+        session()->flash('success', 'Property key feature updated successfully');
     }
+    // for edit action
+    // #[On('parentUpdateButtonTriggered')]
+    // public function handleUpdateProperty()
+    // {   
+    //     try {
+    //         $validatedData = $this->validate();
+
+    //         $this->property->keyFeature()->updateOrCreate([
+    //                 'property_id' => $this->property->id,
+    //             ],
+    //             $validatedData
+    //         );
+    //         session()->flash('success', 'Property updated successfully');
+    //      } catch (ValidationException $e) {
+    //         Log::info('Property validation error. Please double check.');
+    //         throw $e;
+    //     }
+        
+    // }
 }    
 
 ?>
@@ -66,6 +78,9 @@ Add your form or content for adding a property here
     <!-----------------------------------------
     Basic location info
     ----------------------------------------->
+    <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
+    </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
@@ -74,7 +89,7 @@ Add your form or content for adding a property here
                         {{ __('Key Features')  }}
                     </h3>
                     <p class="mb-5 text-sm text-gray-600">{{ __('Tick the key features of the property. This will help your property show up in more search results and attract more potential buyers.') }}</p>
-                     <livewire:accordion-key-features :property="$property"/>
+                     <livewire:accordion-key-features :property="$property" :isEdit="$isEdit"/>
                 </div>  
             </div>
         </div>
@@ -101,7 +116,7 @@ Add your form or content for adding a property here
                     </svg>
                 </div>
                 
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('status') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ session('success') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500"></p>
                 </div>

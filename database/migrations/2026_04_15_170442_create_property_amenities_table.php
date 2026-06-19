@@ -18,21 +18,22 @@ return new class extends Migration
                 ->references('id')
                 ->on('properties')
                 ->onDelete('cascade');
-            $table->decimal('amenities',8,2)->default(0);
-            $table->decimal('airport',8,2)->default(0);
-            $table->decimal('sea',8,2)->default(0);
-            $table->decimal('public_transport',8,2)->default(0);
-            $table->decimal('schools',8,2)->default(0);
-            $table->decimal('resorts',8,2)->default(0);
-            $table->decimal('terrace',8,2)->default(0)->index();
-            $table->decimal('attic',8,2)->default(0);
-            $table->decimal('roof_garden',8,2)->default(0);
-            $table->decimal('covered_veranda',8,2)->default(0);
-            $table->decimal('uncovered_veranda',8,2)->default(0);
-            $table->decimal('covered_parking',8,2)->default(0);
-            $table->decimal('basement',8,2)->default(0);
-            $table->decimal('courtyard',8,2)->default(0);
-            $table->decimal('garden',8,2)->default(0);
+            $table->integer('amenities')->nullable();
+            $table->integer('airport')->nullable();
+            $table->integer('sea')->nullable();
+            $table->integer('public_transport')->nullable();
+            $table->integer('schools')->nullable();
+            $table->integer('resorts')->nullable();
+
+            $table->integer('terrace')->nullable();
+            $table->integer('attic')->nullable();
+            $table->integer('roof_garden')->nullable();
+            $table->integer('covered_veranda')->nullable();
+            $table->integer('uncovered_veranda')->nullable();
+            $table->integer('covered_parking')->nullable();
+            $table->integer('basement')->nullable();
+            $table->integer('courtyard')->nullable();
+            $table->integer('garden')->nullable();
             $table->timestamps();
         });
     }
@@ -40,7 +41,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void 
+    public function down(): void
     {
         Schema::dropIfExists('property_amenities');
     }

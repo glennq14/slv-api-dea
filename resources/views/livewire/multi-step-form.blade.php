@@ -97,14 +97,16 @@
                         &larr; Cancel
                     </a>
                 <!---------EDIT BUTTON----------->
-                    <button id="nextBtn"  wire:click="$dispatch('parentUpdateButtonTriggered')" wire:loading.class="opacity-50" 
-                        class="px-7 py-2 bg-red-500 text-white rounded-md hover:bg-red-500 cursor-pointer"
-                    >
-                        <span wire:loading.remove>&#x21bb; {{ __('Update') }} </span>
-                        <span wire:loading>
-                            Loading..
-                        </span>
-                    </button>
+                    @if ( $currentStep !== 3 && $currentStep !== 4)
+                        <button id="updatetBtn"  wire:loading.class="opacity-50" wire:click="$dispatch('parentUpdateButtonTriggered')" 
+                            class="px-7 py-2 bg-red-500 text-white rounded-md hover:bg-red-500 cursor-pointer"
+                        >
+                            <span wire:loading.remove>&#x21bb; {{ __('Update') }} </span>
+                            <span wire:loading>
+                                Loading..
+                            </span>
+                        </button>
+                    @endif
                 @endif
             </div>
         </div>
@@ -128,10 +130,91 @@
             selector: '#description'
         });
     });
+<?php /*
+    // function uploadSingle(folder) {
+    //     return {
+    //         fileUrl: null,
+
+    //         async upload(event) {
+    //             const file = event.target.files[0];
+
+    //             const res = await fetch('/s3/file-upload/', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     filename: file.name,
+    //                     type: file.type,
+    //                     folder: folder
+    //                 })
+    //             });
+
+    //             const data = await res.json();
+
+    //             await fetch(data.url, {
+    //                 method: 'PUT',
+    //                 headers: { 'Content-Type': file.type },
+    //                 body: file
+    //             });
+
+    //             this.fileUrl = data.file_url;
+
+    //             @this.set(folder, {
+    //                 path: data.path,
+    //                 url: data.file_url
+    //             });
+    //         }
+    //     };
+    // }
+
+    // function uploadMultiple(folder) {
+    //     return {
+    //         files: [],
+
+    //         async upload(event) {
+    //             for (let file of event.target.files) {
+    //                 console.log('upload');
+    //                 const res = await fetch('/s3/file-upload/', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //                     },
+    //                     body: JSON.stringify({
+    //                         filename: file.name,
+    //                         type: file.type,
+    //                         folder: folder
+    //                     })
+    //                 });
+
+    //                 const data = await res.json();
+
+    //                 await fetch(data.url, {
+    //                     method: 'PUT',
+    //                     headers: { 'Content-Type': file.type },
+    //                     body: file
+    //                 });
+
+    //                 this.files.push({
+    //                     path: data.path,
+    //                     url: data.file_url
+    //                 });
+
+    //                 window.Livewire.find('{{ $property->id }}').push(folder, {
+    //                     path: data.path,
+    //                     url: data.file_url
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }
+*/ ?>
     </script>
 @endscript
 @push('scripts')
+    @vite(['resources/js/Sortable.min.js'])
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjtQlPL0rirZ70g8Xew5Ol3mqhqmAju08&&callback=initMap&loading=async&libraries=places"></script>
     <script src="{{ asset('/js/google.map.js') }}" defer></script>
-    <script src="https://cdn.tiny.cloud/1/b3wc1i5bv8b638wzwjui8jkokn0wypyger45sw99mzhtse9i/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous" defer></script>
 @endpush

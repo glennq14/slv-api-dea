@@ -18,8 +18,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('properties')
                 ->onDelete('cascade');
-            $table->enum('name', ['views','orientation','private_parking', 'kitchen', 'extras', 'heating', 'air_conditioning', 'inclusions', 'furnished', null]);
-            $table->string('fields')->nullable();
+            $table->enum('name', ['views', 'orientation', 'private_parking', 'kitchen', 'extras', 'heating', 'air_conditioning', 'inclusions', 'furnished', null]);
+            $table->string('field')->nullable();
             $table->string('value')->nullable();
             $table->timestamps();
         });

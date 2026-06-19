@@ -11,13 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('banks', function (Blueprint $table) {
+        Schema::create('property_banks', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('mobile_number');
-            $table->string('phone_number');
+            $table->unsignedBigInteger('property_id');
+            $table->foreign('property_id')
+                ->references('id')
+                ->on('properties')
+                ->onDelete('cascade');
+            $table->string('bank');
+            $table->string('branch');
+            $table->string('account_ref')->unique();
+            $table->string('sort_code');
+            $table->string('account_name');
+            $table->string('account_number');
+            $table->string('address');
+            $table->string('contact_name');
+            $table->string('contact_phone');
+            $table->string('contact_email');
             $table->timestamps();
         });
     }
@@ -27,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banks');
+        Schema::dropIfExists('property_bank');
     }
 };

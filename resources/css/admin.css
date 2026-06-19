@@ -2,3 +2,5 @@
   content: " *";
   color: red;
 }
+
+[x-cloak] { display: none !important; }

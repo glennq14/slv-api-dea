@@ -12,6 +12,7 @@
     <!-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/dashboard-template.css') }}">
     <!-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> -->
+     <script src="https://ckeditor.com"></script>
 </head>
 <body>
 <div class="layout">
@@ -132,5 +133,6 @@
 </footer>
 <script src="{{ asset('js/app.js') }}" defer></script>
 @stack('scripts')
+<?php /* @vite(['resources/js/google.map.js']) */ ?>
 </body>
 </html>

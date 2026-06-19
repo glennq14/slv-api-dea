@@ -1,8 +1,8 @@
 <div class="space-y-2">
 
-    @foreach($items as $item)
+    @foreach($keyFeatures as $item)
+        @continue (!isset($item['id']))
         <div wire:ignore.self class="border rounded">
-
             <button
                 wire:click="toggle({{ $item['id'] }})"
                 class="flex w-full px-4 py-3 text-left bg-gray-100 hover:bg-gray-200"
@@ -34,7 +34,7 @@
                             @foreach ($item['fields'] as $field)
                             <div wire:ignore.self class="border border-gray-300 flex items-center rounded p-2">
                                 <span>{{ $field['label'] }}</span>
-                                <input type="checkbox" class="ml-auto rounded border-gray-400" />
+                                <input type="checkbox" class="ml-auto rounded border-gray-400" wire:model="{{ $field['name'] }}" value="1" checked />
                             </div>
                             @endforeach
                             @endif

@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     const UPDATED_AT = null;
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('property_photos', function (Blueprint $table) {
+        Schema::create('property_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->foreign('property_id')
@@ -20,13 +21,18 @@ return new class extends Migration
                 ->on('properties')
                 ->onDelete('cascade');
             $table->enum('type', [
-                    'gallery', 
-                    'floorplan'
-                ])
+                'gallery',
+                'floorplan',
+                'document',
+            ])
                 ->nullable()
                 ->comment('The type of media which is being sent');
+            $table->string('path')
+                ->comment('File patch');
             $table->string('url')
                 ->comment('The URL to retrieve this piece of media from');
+            $table->string('orig_filename')
+                ->comment('File original file name');
             $table->string('caption')
                 ->comment('The caption to be displayed for this piece of media')
                 ->nullable();
@@ -35,7 +41,9 @@ return new class extends Migration
             $table->dateTime('photo_update_date')
                 ->comment('The date the media at this URL was last updated in the format: dd-MM-yyyy HH:mm:ss')
                 ->nullable();
-            $table->timestamp('created_at')->useCurrent(); 
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

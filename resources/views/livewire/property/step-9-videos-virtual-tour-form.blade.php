@@ -25,9 +25,9 @@ new class extends Component
     {
         $this->property          = $property;
         $this->isEdit            = $isEdit;
-        $this->embed_url_1       = ($property->video->embed_url_1) ? $property->video->embed_url_1 : '';
-        $this->embed_url_2       = ($property->video->embed_url_2) ? $property->video->embed_url_2 : '';
-        $this->virtual_tour_link = ($property->video->virtual_tour_link) ? $property->video->virtual_tour_link : '';
+        $this->embed_url_1       = ($property->video->embed_url_1) ?? '';
+        $this->embed_url_2       = ($property->video->embed_url_2) ?? '';
+        $this->virtual_tour_link = ($property->video->virtual_tour_link) ?? '';
     }
 
     #[On('parentNextStepButtonTriggered')]
@@ -55,7 +55,7 @@ new class extends Component
         try {
             $validatedData = $this->validate();
 
-            $this->property->videos()->updateOrCreate([
+            $this->property->video()->updateOrCreate([
                     'property_id' => $this->property->id,
                 ],
                 $validatedData
@@ -77,6 +77,7 @@ Basic location info
 <div>
     <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
     </div>
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

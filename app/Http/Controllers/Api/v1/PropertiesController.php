@@ -18,10 +18,10 @@ class PropertiesController extends Controller
     public function index(Request $request)
     {
         $query = Property::query()
-                    ->with(['networks'])
-                    ->where('status', 'published')
-                    ->whereHas('networks', fn ($query) => $query->where('external_feeds', 'slv'));
-
+            ->with(['networks'])
+            // ->where('status', 'published')
+            ->whereHas('networks', fn ($query) => $query->where('external_feeds', 'like', '%slv%'));
+        
         if ($request->filled('include')) {
             $query->with($this->parseIncludes($request->input('include')));
         }
@@ -47,20 +47,20 @@ class PropertiesController extends Controller
                 $query->whereHas('address', fn ($query) => $query->whereIn('town_city', $towns));
             }
 
-            if ($request->filled('propertyType') 
+            if ($request->filled('propertyType')
                 && $request->input('propertyType') != 'all'
             ) {
                 $types = array_map('trim', explode(',', urldecode($request->input('propertyType'))));
                 $query->whereHas('propertyType', fn ($query) => $query->whereIn('name', $types));
             }
 
-            if ($request->filled('bedrooms') 
+            if ($request->filled('bedrooms')
                 && $request->input('bedrooms') != 'any'
             ) {
                 $query->where('properties.bedrooms', $request->input('bedrooms'));
             }
 
-            if ($request->filled('bathrooms') 
+            if ($request->filled('bathrooms')
                 && $request->input('bathrooms') != 'any'
             ) {
                 $query->where('properties.bathrooms', $request->input('bathrooms'));
@@ -81,22 +81,22 @@ class PropertiesController extends Controller
                 });
             }
 
-            if ($request->filled('plot_size') 
+            if ($request->filled('plot_size')
                 && $request->input('plot_size') != 'any'
             ) {
                 $query->where('properties.plot', '>=', $request->input('plot_size'));
             }
 
-            if ($request->filled('area_size')
-                && $request->input('area_size') != 'any'
-            ) {
-                $query->whereHas('amenities', fn ($query) => $query->where('covered', '>=', $request->input('area_size')));
-            }
+            // if ($request->filled('area_size')
+            //     && $request->input('area_size') != 'any'
+            // ) {
+            //     $query->whereHas('amenities', fn ($query) => $query->where('covered', '>=', $request->input('area_size')));
+            // }
         }
+        
+        $propertyList = $query->paginate();
 
-        $propertyList = $query->paginate(1);
-
-        $propertyList->getCollection()->each->makeHidden(['description','plot_description', 'pool_description']);
+        $propertyList->getCollection()->each->makeHidden(['description', 'plot_description', 'pool_description']);
 
         return PropertyResource::collection($propertyList);
     }
@@ -135,8 +135,8 @@ class PropertiesController extends Controller
     public function show(Request $request, Property $property)
     {
 
-        if ($property->status !== 'published' 
-            || !$property->networks()->where('external_feeds', 'slv')->exists()
+        if ($property->status !== 'published'
+            || ! $property->networks()->where('external_feeds', 'slv')->exists()
         ) {
             $property = null;
         } else {
@@ -150,18 +150,16 @@ class PropertiesController extends Controller
 
     /**
      * Display the specified resource using reference
-     * 
-     * @param Request $request
-     * @param string $reference
+     *
      * @return PropertyResource
      */
     public function showByReference(Request $request, string $reference)
     {
         $property = Property::where('reference', trim($reference))
-                        ->with(['networks'])
-                        ->where('status', 'published')
-                        ->whereHas('networks', fn ($query) => $query->where('external_feeds', 'slv'))
-                        ->firstOrFail();
+            ->with(['networks'])
+            // ->where('status', 'published')
+            // ->whereHas('networks', fn ($query) => $query->where('external_feeds', 'slv'))
+            ->firstOrFail();
 
         if ($request->filled('include')) {
             if ($request->input('include') == 'all') {
@@ -172,8 +170,8 @@ class PropertiesController extends Controller
                     'contact',
                     'photos',
                     'amenities',
-                    'key_features',
-                    'media'
+                    'keyFeatures',
+                    'photos',
                 ]);
             } else {
                 $property->load($this->parseIncludes($request->input('include')));

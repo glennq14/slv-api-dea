@@ -20,7 +20,7 @@ new class extends Component
     {
         $this->property = $property;
         $this->isEdit = $isEdit;
-        $this->description = $property->description;
+        $this->description = $property->description ?? '';
     }
 
     /****************************************
@@ -53,10 +53,11 @@ new class extends Component
     #[On('parentUpdateButtonTriggered')]
     public function handleUpdateProperty()
     {
+        
         $validatedData = $this->validate();
 
         if ($this->property && $this->property->exists) {
-            
+
             $this->property->update($validatedData);
 
             session()->flash('success', 'Property has been successfully updated!');
@@ -72,17 +73,20 @@ Basic location info
 <div>
     <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
         <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+        <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
     </div>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow-md sm:rounded-lg">
                 <div class="w-full">
                     <h3 class="font-semibold text-xl text-blue-900 leading-tight mb-5">
-                        {{ __('Title and Description')  }}
+                        {{ __('Property Description')  }}
                     </h3>
                     <div class="w-full">
+                        @error('description')
+                        <div class="bg-red-100 p-3 rounded-5"><span class="text-red-500 text-shadow-sm">{{ $message }}</span></div>
+                        @enderror
                     </div>
-                    @error('description') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                     <div class="w-full py-5">
                         <label for="description" class="required-field">{{ __('Property Description')  }} <span class="text-gray-500">{{ __('2000 characters recommended') }}</span></label>
                         
@@ -91,6 +95,7 @@ Basic location info
                                 <textarea wire:model.live="description" id="description" class="w-full h-64 text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" required></textarea> 
                                 <span class="text-sm text-gray-400">2000 characters</span>
                             </div>
+
                             <div>
                                 <button class="flex px-4 py-1 bg-gray-300 hover:bg-gray-400 rounded">
                                     <span class="pr-2">Generate</span>

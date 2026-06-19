@@ -1,6 +1,7 @@
 <?php 
 // echo "<pre>";
-// print_r($properties[0]->amenities); exit;
+// print_r($properties); exit;
+$siglepageurl = config('services.slv_website.url') . '/property';
 ?>
 
 <x-app-layout>
@@ -64,11 +65,6 @@
                         <th
                             class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-700 uppercase bg-gray-100 border-b-2 border-gray-200"
                         >
-                            Bank
-                        </th>
-                        <th
-                            class="px-5 py-3 text-xs font-semibold tracking-wider text-left text-gray-700 uppercase bg-gray-100 border-b-2 border-gray-200"
-                        >
                             Website Live
                         </th>
                         <th
@@ -86,13 +82,15 @@
                             <tr>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                     <img
-                                        class="w-full h-full rounded size-40"
-                                        src="{{ $property->photos[0]->url ?? 'https://via.placeholder.com/150' }}"
+                                        class="h-full rounded w-[150px]"
+                                        src="{{ $property->photos[0]->url ?? asset('img/no-mage-available.jpg') }}"
                                         alt=""
                                     />
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                                    <p class="text-gray-900 whitespace-no-wrap">{{ $property->reference }}</p>
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        <a href="{{ $siglepageurl . '/' . Str::slug( $property->propertyType->name, '-') . '-in-' . Str::slug($property->address?->town_city, '-') . '-ref' . $property->reference }}" target="_blank" class="font-semibold">{{ $property->reference }}</a>
+                                    </p>
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                     <p class="text-gray-900 whitespace-no-wrap">{{ $property->propertyType->name ?? '' }} in<br />{{ $property->address->town_city ?? '' }}</p>
@@ -101,12 +99,16 @@
                                     <span
                                     class="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900"
                                     >
+                                    @if ($property->address?->region)
                                     <span
                                         aria-hidden
                                         class="absolute inset-0 bg-green-200 rounded-full opacity-50"
                                     ></span>
-                                    <span class="relative">{{ $property->address->region ?? '' }}</span>
+                                        
+                                        <span class="relative">{{ $property->address->region ?? '' }}</span>
+                                        
                                     </span>
+                                    @endif
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200 text-center">
                                     <p class="text-gray-900 whitespace-no-wrap">{{ $property->bedrooms ?? 'N/A' }}</p>
@@ -119,9 +121,6 @@
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200 text-center">
                                     <p class="text-gray-900 whitespace-no-wrap">{{ number_format($property->area_size, 0)?? 'N/A' }}</p>
-                                </td>
-                                <td class="px-5 py-5 text-sm bg-white border-b border-gray-200 text-center">
-                                    <p class="text-gray-900 whitespace-no-wrap">BANK</p>
                                 </td>
                                 <td class="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                     <p class="text-gray-900 whitespace-no-wrap">

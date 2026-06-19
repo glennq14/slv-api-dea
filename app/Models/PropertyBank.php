@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
-    'property_id', 'external_feeds', 'website_banner',
+    'property_id', 'contact_email', 'sort_code', 'account_name', 'account_number', 'address', 'contact_name', 
+    'contact_phone', 'bank_id', 'branch', 'account_ref'
 ])]
-class PropertyNetworks extends Model
+class PropertyBank extends Model
 {
-    const UPDATED_AT = null;
-
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class, 'property_id');
