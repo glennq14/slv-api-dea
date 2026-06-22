@@ -75,8 +75,8 @@ new class extends Component
 Basic location info
 ----------------------------------------->
 <div>
-    <div class="max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
-        <span class="required-field"></span> <span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
+    <div class="flex max-w-7xl mt-3 mx-auto sm:px-6 lg:px-8">
+        <span class="required-field"></span> &nbsp;&nbsp;<span class="text-sm text-gray-800">{{ __('Required fields') }}</span>
         <div class="ml-auto text-blue-900 font-semibold font-custom pr-3">{{ $property->reference }}</div>
     </div>
     <div class="py-6">
