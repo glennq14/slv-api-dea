@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Diaries;
+namespace App\Livewire\Diaries; 
 
 use App\Models\Diary;
 use App\Notifications\DiaryEventAssigned;
