@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\DeveloperController;
+use App\Http\Controllers\VendorController;
 use App\Http\Controllers\PropertiesXmlController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\S3FileUploadController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Diaries\Calendar;
@@ -10,6 +14,7 @@ use App\Livewire\Diaries\Calendar;
 Route::view('/', 'welcome');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    
     Route::view('dashboard', 'dashboard')
         ->middleware(['verified'])
         ->name('dashboard');
@@ -38,6 +43,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::view('profile', 'profile')
         ->name('profile');
+    
+    Route::resource('client', ClientController::class);
+
+    Route::resource('bank', BankController::class);
+
+    Route::resource('vendor', VendorController::class);
+
+    Route::resource('agent', AgentController::class);
 
     Route::resource('developer', DeveloperController::class);
 

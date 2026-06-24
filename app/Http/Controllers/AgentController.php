@@ -33,9 +33,9 @@ class AgentController extends Controller
     {
         $data = $request->validated();
 
-        $agent = Agent::create($data);
+        Agent::create($data);
 
-        return new AgentResource($agent);
+        return redirect()->route('agent.index');
     }
 
     /**
@@ -63,7 +63,7 @@ class AgentController extends Controller
         
         $agent->update($data);
 
-        return new AgentResource($agent);
+        return redirect()->route('agent.index');
     }
 
     /**

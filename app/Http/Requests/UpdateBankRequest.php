@@ -12,7 +12,7 @@ class UpdateBankRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,11 @@ class UpdateBankRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'          =>  'required|string|max:225',
+            'address'       =>  'required|string|max:225',
+            'phone_number'  =>  'required|string|max:225',
+            'mobile_number' =>  'required|string|max:225',
         ];
+
     }
 }

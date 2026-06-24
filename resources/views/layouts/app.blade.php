@@ -44,13 +44,17 @@
                 <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 Agents
             </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('bank.index') }}" class="nav-link {{request()->routeIs('bank') ? 'active' : '' }}">
                 <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l9-4 9 4M3 6v14a1 1 0 001 1h16a1 1 0 001-1V6M3 6h18M9 10v8M15 10v8M12 10v8"/></svg>
                 Banks
             </a>
             <a href="{{ route('vendor.index') }}" class="nav-link {{ request()->routeIs('vendor') ? 'active' : '' }}">
                 <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l9-4 9 4M3 6v14a1 1 0 001 1h16a1 1 0 001-1V6M3 6h18M9 10v8M15 10v8M12 10v8"/></svg>
                 Vendors
+            </a>
+            <a href="{{ route('client.index') }}" class="nav-link {{ request()->routeIs('client') ? 'active' : '' }}">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l9-4 9 4M3 6v14a1 1 0 001 1h16a1 1 0 001-1V6M3 6h18M9 10v8M15 10v8M12 10v8"/></svg>
+                Client
             </a>
             <div class="nav-section">Business</div>
             <a href="#" class="nav-link">

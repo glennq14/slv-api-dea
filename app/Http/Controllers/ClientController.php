@@ -33,9 +33,9 @@ class ClientController extends Controller
     {
         $data = $request->validated();
 
-        $agent = Client::create($data);
+        Client::create($data);
 
-        return new ClientResource($agent);
+        return redirect()->route('bank.index');
     }
 
     /**
@@ -63,7 +63,7 @@ class ClientController extends Controller
         
         $client->update($data);
 
-        return new ClientResource($client);
+        return redirect()->route('bank.index');
     }
 
     /**

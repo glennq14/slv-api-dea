@@ -12,7 +12,7 @@ class UpdateVendorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,11 @@ class UpdateVendorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'first_name'    => 'required|string|max:45',
+            'last_name'     => 'required|string|max:45',
+            'email'         => 'required|string|email|max:255|unique:developers,email',
+            'mobile_number' => 'nullable|string',
+            'phone_number'  =>  'nullable|string',
         ];
     }
 }

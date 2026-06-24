@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vendor;
+use App\Http\Resources\VendorResource;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -12,7 +13,9 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        $vendors = Vendor::paginate(10);
+        
+        return view('vendors.index', compact('vendors'));
     }
 
     /**
@@ -20,7 +23,7 @@ class VendorController extends Controller
      */
     public function create()
     {
-        //
+        return view('vendors.create');
     }
 
     /**
@@ -28,7 +31,11 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validated();
+
+        Vendor::create($data);
+
+        return redirect()->route('vendor.index');
     }
 
     /**
@@ -44,7 +51,7 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        //
+         return view('vendors.edit');
     }
 
     /**
@@ -52,7 +59,11 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        $data = $request->all();
+        
+        $vendor->update($data);
+
+        return redirect()->route('vendor.index');
     }
 
     /**

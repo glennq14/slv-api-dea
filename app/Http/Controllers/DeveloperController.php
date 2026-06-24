@@ -35,9 +35,9 @@ class DeveloperController extends Controller
     {
         $data = $request->validated();
 
-        $developer = Developer::create($data);
+        Developer::create($data);
 
-        return new DeveloperResource($developer);
+        return redirect()->route('developer.index');
     }
 
     /**
@@ -65,7 +65,7 @@ class DeveloperController extends Controller
         
         $developer->update($data);
 
-        return new DeveloperResource($developer);
+        return redirect()->route('developer.index');
     }
 
     /**

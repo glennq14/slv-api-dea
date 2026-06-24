@@ -33,9 +33,9 @@ class BankController extends Controller
     {
         $data = $request->validated();
 
-        $bank = Bank::create($data);
+        Bank::create($data);
 
-        return new BankResource($bank);
+        return redirect()->route('bank.index');
     }
 
     /**
@@ -63,7 +63,7 @@ class BankController extends Controller
         
         $bank->update($data);
 
-        return new BankResource($bank);
+        return redirect()->route('bank.index');
     }
 
     /**

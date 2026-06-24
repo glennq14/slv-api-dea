@@ -22,9 +22,9 @@
             </div>
         </div>
 
-        <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-            Add Agent
-        </button>
+        <a href="{{ route('agent.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+            Add Agent 
+        </a>
     </div>
 
     <div class="w-full overflow-x-auto border rounded-lg shadow-sm content-wrapper">
