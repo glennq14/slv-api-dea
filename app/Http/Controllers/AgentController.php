@@ -35,7 +35,9 @@ class AgentController extends Controller
 
         Agent::create($data);
 
-        return redirect()->route('agent.index');
+
+        return redirect()->route('agent.index')
+            ->with('success', 'The agent has been successfully saved!');
     }
 
     /**
@@ -63,7 +65,8 @@ class AgentController extends Controller
         
         $agent->update($data);
 
-        return redirect()->route('agent.index');
+        return redirect()->route('agent.index')
+                    ->with('success', 'The agent has been successfully saved!');
     }
 
     /**

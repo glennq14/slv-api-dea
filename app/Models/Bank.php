@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\HasFormattedDates;
 
 #[Fillable([
-    'name', 'address', 'telephone', 'mobile',
+    'name', 'address', 'mobile_number', 'phone_number',
 ])]
 class Bank extends Model
 {
     use HasFormattedDates;
+
+    const UPDATED_AT = null;
 }

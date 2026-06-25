@@ -14,7 +14,7 @@ $siglepageurl = config('services.slv_website.url') . '/property';
     <section class="pt-12">
         <div class="py-3 mx-auto max-w-10xl sm:px-6 lg:px-8">
             <div class="mb-5">
-                <a href="{{ url('properties/create') }}" class="px-5 py-2 text-white bg-blue-400 rounded-md hover:bg-blue-500">
+                <a href="{{ url('properties/create') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                     {{ __('+ Create Property')  }}
                 </a>
             </div>

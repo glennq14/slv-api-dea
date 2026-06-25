@@ -38,12 +38,12 @@
                 </div>
                 <div>
                     <label for="telephone" class="block text-black text-sm mb-1">{{ __('Telephone') }}</label>
-                    <input type="text" name="phone_number" id="telephone" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required placeholder="Enter agent telephone number">
+                    <input type="text" name="phone_number" id="telephone" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter agent telephone number">
                 </div>
 
                 <div>
                     <label for="mobile" class="block text-black text-sm mb-1">{{ __('Mobile') }}</label>
-                    <input type="text"  name="mobile_number" id="mobile" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required placeholder="Enter agent mobile number">
+                    <input type="text"  name="mobile_number" id="mobile" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter agent mobile number">
                 </div>
             </div>
             <div class="py-5 flex gap-3">

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasFormattedDates;
 
 #[Fillable([
-    'first_name', 'last_name', 'email', 'mobile_number', 'phone_number'
+    'first_name', 'last_name', 'email', 'mobile_number', 'phone_number',
+    'address', 'zipcode', 'nationality', 'id_card_number','passport_number',
+    'preferred_language'
 ])]
 class Client extends Model
 {

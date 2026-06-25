@@ -36,7 +36,8 @@ class BankController extends Controller
 
         Bank::create($data);
 
-        return redirect()->route('bank.index');
+        return redirect()->route('bank.index')
+            ->with('success', 'The bank has been successfully saved!');
     }
 
     /**
@@ -64,7 +65,8 @@ class BankController extends Controller
         
         $bank->update($data);
 
-        return redirect()->route('bank.index');
+        return redirect()->route('bank.index')
+                    ->with('success', 'The bank has been successfully saved!');
     }
 
     /**

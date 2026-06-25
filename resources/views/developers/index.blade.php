@@ -6,15 +6,21 @@
         </h2>
     </x-slot>
 
+    @if (session()->has('success'))
+        <div id="messageSession" class="fixed top-15 right-5 bg-green-500 text-white px-4 py-3 rounded shadow-lg z-50" >
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="flex items-center justify-end w-full gap-4 py-2 my-2 action-tabs">
         <div class="flex items-center gap-2 text-sm text-gray-600">
             <label for="showCount">Show</label>
             <div class="relative">
                 <select id="showCount" class="appearance-none border border-gray-300 rounded-md pl-3 pr-8 py-1.5 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
+                    <option value="10">{{ __('10') }}</option>
+                    <option value="20">{{ __('20') }}</option>
+                    <option value="50">{{ __('50') }}</option>
+                    <option value="100">{{ __('100') }}</option>
                 </select>
                 <svg class="absolute w-4 h-4 text-gray-400 -translate-y-1/2 pointer-events-none right-2 top-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -23,7 +29,7 @@
         </div>
 
         <a href="{{ route('developer.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-            Add Developer 
+            {{ __('+ Add Developer')  }}
         </a>
     </div>
 
@@ -77,8 +83,8 @@
                             </svg>
                         </span>
                     </th>
-                    <th class="px-6 py-3">
-                        <span class="flex items-center gap-1">
+                    <th class="px-6 py-3 text-center">
+                        <span class="inline-flex items-center gap-1">
                             CREATED AT
                             <svg class="w-3 h-3 text-gray-400" viewBox="0 0 10 12" fill="currentColor">
                                 <path d="M5 0L8 4H2L5 0Z"/>
@@ -161,9 +167,11 @@
         </div>
     </div>
 
+@push('scripts')
 <script>
     const avatarColors = ['#CD7100', '#00A552', '#DCB601', '#009ACD', '#EB5736', '#226E34', '#692DE7', '#D52828', '#AC7DAD'];
-    const developers = <?=  json_encode($developers->toArray()['data']); ?>;
+    
+    const developers = @json($developers->items() ?? []);
    
     function getInitials(name) {
         const parts = name.trim().split(' ');
@@ -200,7 +208,7 @@
                 <td class="px-6 py-3">${developer.phone_number}</td>
                 <td class="px-6 py-3"><span class="font-bold">${developer.mobile_number}</span></td>
 
-                <td class="px-6 py-3">${developer.created_at}</td>
+                <td class="px-6 py-3 text-center">${developer.created_at}</td>
             `;
             tbody.appendChild(row);
         });
@@ -211,6 +219,26 @@
     });
 
     renderDevelopers(10); // initial render
+
+    /******************************************
+     *  Removing success message element 
+     ****************************************/
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageBox = document.getElementById('messageSession');
+        
+        if (messageBox) {
+            setTimeout(function() {
+                messageBox.style.transition = 'opacity 0.5s ease';
+                messageBox.style.opacity = '0';
+                
+                // Remove from DOM after fade out transition
+                setTimeout(function() {
+                    messageBox.remove();
+                }, 5000); 
+            }, 3000); // Wait 3 seconds before starting the fade
+        }
+    });
 </script>
+@endpush
 
 </x-app-layout>
