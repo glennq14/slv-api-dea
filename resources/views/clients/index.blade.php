@@ -1,10 +1,3 @@
-@php
-    if (!isset($clients)) {
-        $clients = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
-    }
-
-    $data = $clients->toArray()['data'] ?? [];
-@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
@@ -28,9 +21,6 @@
                     <option value="50">{{ __('50') }}</option>
                     <option value="100">{{ __('100') }}</option>
                 </select>
-                <svg class="absolute w-4 h-4 text-gray-400 -translate-y-1/2 pointer-events-none right-2 top-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
             </div>
         </div>
 
@@ -38,9 +28,8 @@
             {{ __('+ Add Client') }}
         </a>
     </div>
-
+    <!-- TABLE -->
     <div class="w-full overflow-x-auto border rounded-lg shadow-sm content-wrapper">
-        <!-- List of the Agents Informations -->
         <table class="w-full text-sm text-left table-auto">
             <thead class="font-medium text-gray-600 border-b bg-gray-50">
                 <tr>
@@ -103,7 +92,6 @@
 
             <tbody id="clientsTableBody" class="text-gray-600 divide-y">
             </tbody>
-            
         </table>
     </div>
 
@@ -191,7 +179,7 @@
     }
 
     function renderClients(limit) {
-        const tbody = document.getElementById('clientsTableBody');
+        const tbody = document.getElementById('clientTableBody');
         tbody.innerHTML = '';
 
         clients.slice(0, limit).forEach(client => {
@@ -202,19 +190,26 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="flex px-6 py-3 people-identity">
-                    <div class="flex items-center gap-3">
-                        <div class="slv-avatar" style="background: ${client.avatarColor};">${getInitials(client.full_name)}</div>
-                        <span class="font-bold text-blue-500">${client.full_name}</span>
-                    </div>
+                    <a class="flex items-center gap-3" href="{{ route('client-info') }}">
+                        <div class="slv-avatar" style="background: ${client.avatarColor};">${getInitials(client.name)}</div>
+                        <span class="font-bold text-blue-500">${client.name}</span>
+                    </a>
                 </td>
                 <td class="px-6 py-3">
                     <a class="font-bold text-blue-500 text-hover-link-amber" href="mailto:${client.email}" target="_blank">${client.email}</a>
                 </td>
+<<<<<<< HEAD
                 <td class="px-6 py-3">${client.mobile_number}</td>
                 <td class="px-6 py-3">${client.phone_number ?? '-'}</td>
                 <td class="px-6 py-3"><span class="font-bold">${client.nationality ?? '-'}</span></td>
 
                 <td class="px-6 py-3 text-center">${client.created_at}</td>
+=======
+                <td class="px-6 py-3">${client.mobile}</td>
+                <td class="px-6 py-3">${client.contactOwner}</td>
+                <td class="px-6 py-3"><span class="font-bold">${client.primaryCompany}</span></td>
+                <td class="px-6 py-3">${client.lastStatus}</td>
+>>>>>>> clients
             `;
             tbody.appendChild(row);
         });
@@ -247,4 +242,4 @@
 </script>
 @endpush
 
-</x-app-layout> 
+</x-app-layout>
