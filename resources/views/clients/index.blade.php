@@ -179,7 +179,7 @@
     }
 
     function renderClients(limit) {
-        const tbody = document.getElementById('clientTableBody');
+        const tbody = document.getElementById('clientsTableBody');
         tbody.innerHTML = '';
 
         clients.slice(0, limit).forEach(client => {
@@ -188,28 +188,24 @@
             }
 
             const row = document.createElement('tr');
+            
+            let baseURL     = "{{ route('client.show', ':id') }}";
+            let finalUrl    = baseURL.replace(':id', client.id);
+            
             row.innerHTML = `
                 <td class="flex px-6 py-3 people-identity">
-                    <a class="flex items-center gap-3" href="{{ route('client-info') }}">
-                        <div class="slv-avatar" style="background: ${client.avatarColor};">${getInitials(client.name)}</div>
-                        <span class="font-bold text-blue-500">${client.name}</span>
+                    <a class="flex items-center gap-3" href="${finalUrl}">
+                        <div class="slv-avatar" style="background: ${client.avatarColor};">${getInitials(client.full_name)}</div>
+                        <span class="font-bold text-blue-500">${client.full_name}</span>
                     </a>
                 </td>
                 <td class="px-6 py-3">
                     <a class="font-bold text-blue-500 text-hover-link-amber" href="mailto:${client.email}" target="_blank">${client.email}</a>
                 </td>
-<<<<<<< HEAD
                 <td class="px-6 py-3">${client.mobile_number}</td>
                 <td class="px-6 py-3">${client.phone_number ?? '-'}</td>
                 <td class="px-6 py-3"><span class="font-bold">${client.nationality ?? '-'}</span></td>
-
                 <td class="px-6 py-3 text-center">${client.created_at}</td>
-=======
-                <td class="px-6 py-3">${client.mobile}</td>
-                <td class="px-6 py-3">${client.contactOwner}</td>
-                <td class="px-6 py-3"><span class="font-bold">${client.primaryCompany}</span></td>
-                <td class="px-6 py-3">${client.lastStatus}</td>
->>>>>>> clients
             `;
             tbody.appendChild(row);
         });

@@ -37,9 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware(['verified'])
         ->name('vendors');
 
-    Route::view('clients', 'clients.index')
-        ->middleware(['verified'])
-        ->name('clients');
+    // Route::view('clients', 'clients.index')
+    //     ->middleware(['verified'])
+    //     ->name('clients');
 
     Route::view('client-info', 'clients.client')
         ->middleware(['verified'])
