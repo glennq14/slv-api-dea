@@ -520,7 +520,7 @@ Basic location info
                         </div>
 
                         <div>
-                            <label for="mobile" class="required-field block text-black text-sm mb-1">{{ __('Mobile') }}</label>
+                            <label for="mobile" class="block text-black text-sm mb-1">{{ __('Mobile') }}</label>
                             <input type="text"  wire:model.live.debounce.500ms="mobile_number" id="mobile" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                             @error('mobile_number') <span class="text-red-500 text-shadow-sm">{{ $message }}</span> @enderror
                         </div>
