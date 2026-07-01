@@ -11,13 +11,20 @@ class ClaudeClient
         $prompt = $this->buildPrompt($property);
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.claude.key'),
-            'Content-Type' => 'application/json',
-        ])->timeout(config('claude.timeout', 30))
-          ->post(config('claude.endpoint'), [
-              'model' => config('claude.model'),
-              'prompt' => $prompt,
-              'max_tokens' => config('claude.max_tokens'),
+            'x-api-key'         => config('services.claude.key'),
+            'Content-Type'      => 'application/json',
+            'anthropic-version' => config('services.claude.anthropic-version', '2023-06-01'),
+        ])->timeout(config('services.claude.timeout', 30))
+          ->post(config('services.claude.endpoint'), [
+                'model'         => config('services.claude.model'),
+                'system'        => 'You are a helpful assistant that generates SEO-optimized property descriptions based on structured property data.',
+                'messages'      => [
+                    [
+                        'role' => 'user',
+                        'content' => $prompt,
+                    ]
+                ],
+                'max_tokens' => (int) config('services.claude.max_tokens'),
           ]);
 
         if ($response->successful()) {
