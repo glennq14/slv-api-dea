@@ -91,6 +91,26 @@ new class extends Component
             session()->flash('success', 'Property has been successfully updated!');
         }
     }
+
+    /****************************************
+     * AI Generate Description Method   
+     ****************************************/
+    #[On('generateDescription')]
+    public function generateDescription()
+    {
+        try {
+            
+            $validatedData = $this->validate([
+                'description' => 'nullable|string',
+            ]);
+
+            
+
+        } catch (ValidationException $e) {
+            Log::info('Property validation error. Please double check.');
+            throw $e;
+        }
+    }
 }
 
 ?>
@@ -117,7 +137,7 @@ Basic location info
                     <div class="w-full py-5">
                         <label for="PropertyDescription" class="required-field">{{ __('Property Description')  }} <span class="text-gray-500">{{ __('2000 characters recommended') }}</span></label>
                         <input type="hidden" value="{{ $property->id }}" name="property_id" id="propertyID" />
-                        
+                        <button type="button" >Generate Description</button>
                        <div
                             wire:ignore
                             x-data="tinymceComponent()"
